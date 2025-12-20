@@ -53,3 +53,8 @@ dkms.conf
 
 # debug information files
 *.dwo
+
+*~
+**/*~
+.lock-waf_linux_build
+build/
