@@ -15,9 +15,9 @@ void charge_update(BatteryChargeState charge_state) {
 }
  
 void charge_create(Layer *window_layer, GRect *bounds) {
-  charge_layer = text_layer_create(GRect(0, 30, bounds->size.w, 50));
-  text_layer_set_background_color(charge_layer, GColorClear);
-  text_layer_set_text_color(charge_layer, GColorBlack);
+  charge_layer = text_layer_create(GRect(0, 62, 50, 31));
+  text_layer_set_background_color(charge_layer, GColorBlack);
+  text_layer_set_text_color(charge_layer, GColorWhite);
   text_layer_set_text(charge_layer, "100");
   text_layer_set_font(charge_layer, fonts_get_system_font(FONT_KEY_GOTHIC_28_BOLD));
   text_layer_set_text_alignment(charge_layer, GTextAlignmentCenter);
