@@ -3,49 +3,76 @@
 #include "display.h"
 
 static struct {
-  TextLayer *layer;
-  GRect rect;
-  uint8_t back, front;
-  GTextAlignment align;
-  const char *font;
-} fmt[disp_end] = {
-  {NULL, {{0, 21},    {144, 41}} , 0xFF, 0xC0, GTextAlignmentCenter, FONT_KEY_GOTHIC_14            },      //  disp_none
-  {NULL, {{0, -10},   {128, 31}} , 0xC0, 0xFF, GTextAlignmentLeft  , FONT_KEY_GOTHIC_28_BOLD       },      //  disp_date *
-  {NULL, {{128, -10}, {16, 31}}  , 0xC0, 0xFF, GTextAlignmentRight , FONT_KEY_GOTHIC_28_BOLD       },      //  disp_pchg *
-  {NULL, {{32, 62},   {80, 31}}  , 0xC0, 0xFF, GTextAlignmentCenter, FONT_KEY_GOTHIC_28_BOLD       },      //  disp_noti *
-  {NULL, {{0, 62},    {32, 31}}  , 0xFF, 0xC0, GTextAlignmentLeft  , FONT_KEY_GOTHIC_28_BOLD       },      //  disp_wbat
-  {NULL, {{112, 62},  {32, 31}}  , 0xFF, 0xC0, GTextAlignmentRight , FONT_KEY_GOTHIC_28_BOLD       },      //  disp_pbat
-  {NULL, {{0, 21},    {144, 41}} , 0xFF, 0xC0, GTextAlignmentCenter, FONT_KEY_GOTHIC_14            },      //  disp_1
-  {NULL, {{0, 11},    {144, 51}} , 0x00, 0xC0, GTextAlignmentCenter, FONT_KEY_ROBOTO_BOLD_SUBSET_49},      //  disp_home
-  {NULL, {{0, 93},    {144, 26}} , 0xFF, 0xC0, GTextAlignmentLeft  , FONT_KEY_GOTHIC_24_BOLD       },      //  disp_bt  
-  {NULL, {{0, 138},   {128, 30}} , 0xC0, 0xFF, GTextAlignmentLeft  , FONT_KEY_GOTHIC_28_BOLD       },      //  disp_away *
-  {NULL, {{128, 138}, {16, 30}}  , 0xC0, 0xFF, GTextAlignmentRight , FONT_KEY_GOTHIC_28_BOLD       },      //  disp_dnd  *
-  {NULL, {{0, 119},   {144, 20}} , 0xFF, 0xC0, GTextAlignmentCenter, FONT_KEY_GOTHIC_14            },      //  disp_2
-  {NULL, {{0, 119},   {128, 20}} , 0xFF, 0xC0, GTextAlignmentLeft  , FONT_KEY_GOTHIC_24_BOLD       },      //  disp_wifi
-  {NULL, {{128, 119}, {16, 20}}  , 0xFF, 0xC0, GTextAlignmentRight , FONT_KEY_GOTHIC_24_BOLD       },      //  disp_net 
+    TextLayer *layer;
+    GRect rect;
+    uint8_t back, front;
+    GTextAlignment align;
+    const char *font;
+    char *text;
+} disp[disp_end] = {
+    {NULL, {{0, 21},    {144, 41}} , 0x00, 0xC0, GTextAlignmentCenter, FONT_KEY_GOTHIC_14            , NULL},      //  disp_none
+    {NULL, {{0, -10},   {144, 31}} , 0x00, 0xFF, GTextAlignmentLeft  , FONT_KEY_GOTHIC_28_BOLD       , NULL},      //  disp_date
+    {NULL, {{0, -10},   {144, 31}} , 0x00, 0xFF, GTextAlignmentRight , FONT_KEY_GOTHIC_28_BOLD       , NULL},      //  disp_pchg
+    {NULL, {{0, 14},    {144, 51}} , 0x00, 0xC0, GTextAlignmentCenter, FONT_KEY_ROBOTO_BOLD_SUBSET_49, NULL},      //  disp_home
+    {NULL, {{0, 64},    {144, 31}} , 0x00, 0xFF, GTextAlignmentCenter, FONT_KEY_GOTHIC_28_BOLD       , NULL},      //  disp_noti
+    {NULL, {{0, 64},    {144, 31}} , 0x00, 0xC0, GTextAlignmentLeft  , FONT_KEY_GOTHIC_28_BOLD       , NULL},      //  disp_wbat
+    {NULL, {{0, 64},    {144, 31}} , 0x00, 0xC0, GTextAlignmentRight , FONT_KEY_GOTHIC_28_BOLD       , NULL},      //  disp_pbat
+    {NULL, {{0, 92},    {144, 29}} , 0x00, 0xC0, GTextAlignmentLeft  , FONT_KEY_GOTHIC_24_BOLD       , NULL},      //  disp_bt  
+    {NULL, {{0, 113},   {144, 29}} , 0x00, 0xC0, GTextAlignmentLeft  , FONT_KEY_GOTHIC_24_BOLD       , NULL},      //  disp_wifi
+    {NULL, {{0, 113},   {144, 29}} , 0x00, 0xC0, GTextAlignmentRight , FONT_KEY_GOTHIC_24_BOLD       , NULL},      //  disp_net 
+    {NULL, {{0, 136},   {144, 31}} , 0x00, 0xFF, GTextAlignmentLeft  , FONT_KEY_GOTHIC_28_BOLD       , NULL},      //  disp_away
+    {NULL, {{0, 136},   {144, 31}} , 0x00, 0xFF, GTextAlignmentRight , FONT_KEY_GOTHIC_28_BOLD       , NULL},      //  disp_dnd 
 };
 
-void disp_create(Layer *window_layer) {
-  TextLayer *layer;
+static struct {
+    BitmapLayer *layer;
+    GRect rect;
+    uint8_t color;
+} bg[] = {
+    {NULL, {{0, 0}, {144, 21}}, 0xC0},
+    {NULL, {{28, 70}, {88, 26}}, 0xC0},
+    {NULL, {{0, 143}, {144, 25}}, 0xC0},
+};
 
-  for (disp_t index = disp_none + 1; index < disp_end; index++) {
-    layer = text_layer_create(fmt[index].rect);
-    text_layer_set_background_color(layer, (GColor8){.argb=fmt[index].back});
-    text_layer_set_text_color(layer, (GColor8){.argb=fmt[index].front});
-    text_layer_set_text(layer, "");
-    text_layer_set_font(layer, fonts_get_system_font(fmt[index].font));
-    text_layer_set_text_alignment(layer, fmt[index].align);
-    layer_add_child(window_layer, text_layer_get_layer(layer));
-    fmt[index].layer = layer;
-  }
+#define BG (sizeof(bg) / sizeof(bg[0]))
+
+void disp_create(Layer *window_layer) {
+    for (size_t i = 0; i < BG; i++) {
+        BitmapLayer *layer = bitmap_layer_create(bg[i].rect);
+        bitmap_layer_set_background_color(layer, (GColor8){.argb=bg[i].color});
+        bitmap_layer_set_compositing_mode(layer, GCompOpAnd);
+        layer_add_child(window_layer, bitmap_layer_get_layer(layer));
+        bg[i].layer = layer;
+    }
+    
+    for (disp_t index = disp_none + 1; index < disp_end; index++) {
+        TextLayer *layer = text_layer_create(disp[index].rect);
+        text_layer_set_background_color(layer, (GColor8){.argb=disp[index].back});
+        text_layer_set_text_color(layer, (GColor8){.argb=disp[index].front});
+        text_layer_set_text(layer, "");
+        text_layer_set_font(layer, fonts_get_system_font(disp[index].font));
+        text_layer_set_text_alignment(layer, disp[index].align);
+        layer_add_child(window_layer, text_layer_get_layer(layer));
+        disp[index].layer = layer;
+    }
 }
 
 void disp_destroy(void) {
-  for (disp_t index = disp_none + 1; index < disp_end; index++) {
-    text_layer_destroy(fmt[index].layer);
-  }
+    for (disp_t index = disp_none + 1; index < disp_end; index++) {
+        text_layer_destroy(disp[index].layer);
+    }
+
+    for (size_t i = 0; i < BG; i++) {
+        bitmap_layer_destroy(bg[i].layer);
+    }
 }
 
 void disp_set(disp_t index, char *text) {
-  text_layer_set_text(fmt[index].layer, text);
+    text_layer_set_text(disp[index].layer, text);
+    disp[index].text = text;
+}
+
+void disp_refresh(disp_t index) {
+    text_layer_set_text(disp[index].layer, disp[index].text);
+
 }
