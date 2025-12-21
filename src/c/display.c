@@ -5,23 +5,21 @@
 static struct {
     TextLayer *layer;
     GRect rect;
-    uint8_t back, front;
+    uint8_t color;
     GTextAlignment align;
     const char *font;
-    char *text;
 } disp[disp_end] = {
-    {NULL, {{0, 21},    {144, 41}} , 0x00, 0xC0, GTextAlignmentCenter, FONT_KEY_GOTHIC_14            , NULL},      //  disp_none
-    {NULL, {{0, -10},   {144, 31}} , 0x00, 0xFF, GTextAlignmentLeft  , FONT_KEY_GOTHIC_28_BOLD       , NULL},      //  disp_date
-    {NULL, {{0, -10},   {144, 31}} , 0x00, 0xFF, GTextAlignmentRight , FONT_KEY_GOTHIC_28_BOLD       , NULL},      //  disp_pchg
-    {NULL, {{0, 14},    {144, 51}} , 0x00, 0xC0, GTextAlignmentCenter, FONT_KEY_ROBOTO_BOLD_SUBSET_49, NULL},      //  disp_home
-    {NULL, {{0, 64},    {144, 31}} , 0x00, 0xFF, GTextAlignmentCenter, FONT_KEY_GOTHIC_28_BOLD       , NULL},      //  disp_noti
-    {NULL, {{0, 64},    {144, 31}} , 0x00, 0xC0, GTextAlignmentLeft  , FONT_KEY_GOTHIC_28_BOLD       , NULL},      //  disp_wbat
-    {NULL, {{0, 64},    {144, 31}} , 0x00, 0xC0, GTextAlignmentRight , FONT_KEY_GOTHIC_28_BOLD       , NULL},      //  disp_pbat
-    {NULL, {{0, 94},    {144, 29}} , 0x00, 0xC0, GTextAlignmentLeft  , FONT_KEY_GOTHIC_24_BOLD       , NULL},      //  disp_bt  
-    {NULL, {{0, 115},   {144, 29}} , 0x00, 0xC0, GTextAlignmentLeft  , FONT_KEY_GOTHIC_24_BOLD       , NULL},      //  disp_wifi
-    {NULL, {{0, 115},   {144, 29}} , 0x00, 0xC0, GTextAlignmentRight , FONT_KEY_GOTHIC_24_BOLD       , NULL},      //  disp_net 
-    {NULL, {{0, 139},   {144, 31}} , 0x00, 0xFF, GTextAlignmentLeft  , FONT_KEY_GOTHIC_28_BOLD       , NULL},      //  disp_away
-    {NULL, {{0, 139},   {144, 31}} , 0x00, 0xFF, GTextAlignmentRight , FONT_KEY_GOTHIC_28_BOLD       , NULL},      //  disp_dnd 
+    {NULL, {{0, -10},   {144, 31}}, 0xFF, GTextAlignmentLeft  , FONT_KEY_GOTHIC_28_BOLD       },      //  disp_date
+    {NULL, {{0, -10},   {144, 31}}, 0xFF, GTextAlignmentRight , FONT_KEY_GOTHIC_28_BOLD       },      //  disp_pchg
+    {NULL, {{0, 14},    {144, 51}}, 0xC0, GTextAlignmentCenter, FONT_KEY_ROBOTO_BOLD_SUBSET_49},      //  disp_home
+    {NULL, {{0, 64},    {144, 31}}, 0xFF, GTextAlignmentCenter, FONT_KEY_GOTHIC_28_BOLD       },      //  disp_noti
+    {NULL, {{0, 64},    {144, 31}}, 0xC0, GTextAlignmentLeft  , FONT_KEY_GOTHIC_28_BOLD       },      //  disp_wbat
+    {NULL, {{0, 64},    {144, 31}}, 0xC0, GTextAlignmentRight , FONT_KEY_GOTHIC_28_BOLD       },      //  disp_pbat
+    {NULL, {{0, 94},    {144, 29}}, 0xC0, GTextAlignmentLeft  , FONT_KEY_GOTHIC_24_BOLD       },      //  disp_bt  
+    {NULL, {{0, 115},   {124, 29}}, 0xC0, GTextAlignmentLeft  , FONT_KEY_GOTHIC_24_BOLD       },      //  disp_wifi
+    {NULL, {{124, 115}, {20, 29}},  0xC0, GTextAlignmentRight , FONT_KEY_GOTHIC_24_BOLD       },      //  disp_net 
+    {NULL, {{0, 139},   {144, 31}}, 0xFF, GTextAlignmentLeft  , FONT_KEY_GOTHIC_28_BOLD       },      //  disp_away
+    {NULL, {{0, 139},   {144, 31}}, 0xFF, GTextAlignmentRight , FONT_KEY_GOTHIC_28_BOLD       },      //  disp_dnd 
 };
 
 static struct {
@@ -45,21 +43,21 @@ void disp_create(Layer *window_layer) {
         bg[i].layer = layer;
     }
     
-    for (disp_t index = disp_none + 1; index < disp_end; index++) {
-        TextLayer *layer = text_layer_create(disp[index].rect);
-        text_layer_set_background_color(layer, (GColor8){.argb=disp[index].back});
-        text_layer_set_text_color(layer, (GColor8){.argb=disp[index].front});
+    for (disp_t i = 0; i < disp_end; i++) {
+        TextLayer *layer = text_layer_create(disp[i].rect);
+        text_layer_set_background_color(layer, GColorClear);
+        text_layer_set_text_color(layer, (GColor8){.argb=disp[i].color});
         text_layer_set_text(layer, "");
-        text_layer_set_font(layer, fonts_get_system_font(disp[index].font));
-        text_layer_set_text_alignment(layer, disp[index].align);
+        text_layer_set_font(layer, fonts_get_system_font(disp[i].font));
+        text_layer_set_text_alignment(layer, disp[i].align);
         layer_add_child(window_layer, text_layer_get_layer(layer));
-        disp[index].layer = layer;
+        disp[i].layer = layer;
     }
 }
 
 void disp_destroy(void) {
-    for (disp_t index = disp_none + 1; index < disp_end; index++) {
-        text_layer_destroy(disp[index].layer);
+    for (disp_t i = 0; i < disp_end; i++) {
+        text_layer_destroy(disp[i].layer);
     }
 
     for (size_t i = 0; i < BG; i++) {
@@ -69,10 +67,4 @@ void disp_destroy(void) {
 
 void disp_set(disp_t index, char *text) {
     text_layer_set_text(disp[index].layer, text);
-    disp[index].text = text;
-}
-
-void disp_refresh(disp_t index) {
-    text_layer_set_text(disp[index].layer, disp[index].text);
-
 }

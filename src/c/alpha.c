@@ -10,10 +10,6 @@ static void tick_handler(struct tm *tick_time, TimeUnits units_changed) {
   time_update();
 }
 
-static void charge_handler(BatteryChargeState charge_state) {
-  charge_update(charge_state);
-}
-
 static void main_window_load(Window *window) {
   Layer *window_layer = window_get_root_layer(window);
 
@@ -38,7 +34,7 @@ static void init() {
   tick_timer_service_subscribe(MINUTE_UNIT, tick_handler);
 
   charge_update(battery_state_service_peek());
-  battery_state_service_subscribe(charge_handler);
+  battery_state_service_subscribe(charge_update);
 
   phone_init();
 }

@@ -1,8 +1,7 @@
 #pragma once
 
 typedef enum {
-  disp_none,
-  disp_date,
+  disp_date = 0,
   disp_pchg,
   disp_home,
   disp_noti,
@@ -20,4 +19,3 @@ typedef enum {
 void disp_create(Layer *window_layer);
 void disp_destroy();
 void disp_set(disp_t index, char *text);
-void disp_refresh(disp_t index);

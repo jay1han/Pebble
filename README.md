@@ -17,19 +17,27 @@ A Pebble watchface including all the features I need.
 
 ### Display layout
 
-| ID   | Line | Position | Item           | Text         | Font      | Actual GRect     |
-|------|------|----------|----------------|--------------|-----------|------------------|
-| date | 1    | Left     | Date           | `Sun 31 Dec` | Gothic 28 | 0, -10, 128, 31  |
-| pchg | 1    | Right    | Phone charging | `C`          | Gothic 28 |                  |
-| home | 2    | Line     | Home time      | `23:39`      | Roboto 49 | 0, 11, 144, 51   |
-| wbat | 3    | Left     | Pebble Battery | `99`         | Gothic 28 | 0, 62, 50, 31    |
-| noti | 3    | Center   | Notifications  | `MK`         | Gothic 28 |                  |
-| pbat | 3    | Right    | Phone Battery  | `99`         | Gothic 28 |                  |
-| bt   | 4    | Left     | Bluetooth      | `Bose:90`    | Gothic 24 |                  |
-| wifi | 5    | Left     | WiFi           | `SFR_box`    | Gothic 18 |                  |
-| net  | 5    | Right    | Network        | `4G`         | Gothic 18 |                  |
-| away | 6    | Left     | Away date/time | `Mon 03:39`  | Gothic 24 | 2, 138, 128, 30  |
-| dnd  | 6    | Right    | Quiet mode     | `Q`          | Gothic 24 | 130, 138, 14, 30 |
+| ID   | Y Pos | Position | Item           | Text         | Font      |
+|------|-------|----------|----------------|--------------|-----------|
+| date | -10   | Left     | Date           | `Sun 31 Dec` | Gothic 28 |
+| pchg | -10   | Right    | Phone charging | `C`          | Gothic 28 |
+| home | 14    | Line     | Home time      | `23:39`      | Roboto 49 |
+| noti | 64    | Center   | Notifications  | `MK`         | Gothic 28 |
+| wbat | 64    | Left     | Pebble Battery | `99`         | Gothic 28 |
+| pbat | 64    | Right    | Phone Battery  | `99`         | Gothic 28 |
+| bt   | 94    | Left     | Bluetooth      | `Bose:90`    | Gothic 24 |
+| wifi | 115   | Left     | WiFi           | `SFR_box`    | Gothic 18 |
+| net  | 115   | Right    | Network        | `4G`         | Gothic 18 |
+| away | 139   | Left     | Away date/time | `Mon 03:39`  | Gothic 24 |
+| dnd  | 139   | Right    | Quiet mode     | `Q`          | Gothic 24 |
+
+Black background
+
+- (0, 0, 144, 21): date and pchg
+
+- (28, 70, 88, 26): noti
+
+- (0, 146, 144, 22): away and dnd
 
 # Display items
 

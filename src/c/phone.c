@@ -30,8 +30,29 @@ void phone_charge(int batt, bool charging) {
   disp_set(disp_pchg, pchg);
 }
 
-void phone_net();
-void phone_wifi();
-void phone_bt();
-void phone_dnd(bool quiet);
-void phone_noti();
+void phone_net(char *text) {
+  strncpy(net, text, sizeof(net) - 1);
+  disp_set(disp_net, net);
+}
+
+void phone_wifi(char *text) {
+  strncpy(wifi, text, sizeof(wifi) - 1);
+  disp_set(disp_wifi, wifi);
+}
+
+void phone_bt(char *text) {
+  strncpy(bt, text, sizeof(bt) - 1);
+  disp_set(disp_bt, bt);
+}
+
+void phone_dnd(bool quiet) {
+  if (quiet) strcpy(dnd, "X");
+  else strcpy(dnd, " ");
+  disp_set(disp_dnd, dnd);
+}
+
+void phone_noti(char *text) {
+  strncpy(noti, text, sizeof(noti) - 1);
+  disp_set(disp_noti, noti);
+}
+
