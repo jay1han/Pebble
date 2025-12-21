@@ -8,7 +8,7 @@ static char pchg[4]  = "C";
 static char net[4]   = "5G";
 static char wifi[20] = "Climbing";
 static char bt[20]   = "Quiet:90";
-static char dnd[4]   = "Q";
+static char dnd[4]   = "X";
 static char noti[20] = "SAMPLE";
 
 void phone_init() {

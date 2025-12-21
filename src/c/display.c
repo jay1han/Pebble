@@ -17,11 +17,11 @@ static struct {
     {NULL, {{0, 64},    {144, 31}} , 0x00, 0xFF, GTextAlignmentCenter, FONT_KEY_GOTHIC_28_BOLD       , NULL},      //  disp_noti
     {NULL, {{0, 64},    {144, 31}} , 0x00, 0xC0, GTextAlignmentLeft  , FONT_KEY_GOTHIC_28_BOLD       , NULL},      //  disp_wbat
     {NULL, {{0, 64},    {144, 31}} , 0x00, 0xC0, GTextAlignmentRight , FONT_KEY_GOTHIC_28_BOLD       , NULL},      //  disp_pbat
-    {NULL, {{0, 92},    {144, 29}} , 0x00, 0xC0, GTextAlignmentLeft  , FONT_KEY_GOTHIC_24_BOLD       , NULL},      //  disp_bt  
-    {NULL, {{0, 113},   {144, 29}} , 0x00, 0xC0, GTextAlignmentLeft  , FONT_KEY_GOTHIC_24_BOLD       , NULL},      //  disp_wifi
-    {NULL, {{0, 113},   {144, 29}} , 0x00, 0xC0, GTextAlignmentRight , FONT_KEY_GOTHIC_24_BOLD       , NULL},      //  disp_net 
-    {NULL, {{0, 136},   {144, 31}} , 0x00, 0xFF, GTextAlignmentLeft  , FONT_KEY_GOTHIC_28_BOLD       , NULL},      //  disp_away
-    {NULL, {{0, 136},   {144, 31}} , 0x00, 0xFF, GTextAlignmentRight , FONT_KEY_GOTHIC_28_BOLD       , NULL},      //  disp_dnd 
+    {NULL, {{0, 94},    {144, 29}} , 0x00, 0xC0, GTextAlignmentLeft  , FONT_KEY_GOTHIC_24_BOLD       , NULL},      //  disp_bt  
+    {NULL, {{0, 115},   {144, 29}} , 0x00, 0xC0, GTextAlignmentLeft  , FONT_KEY_GOTHIC_24_BOLD       , NULL},      //  disp_wifi
+    {NULL, {{0, 115},   {144, 29}} , 0x00, 0xC0, GTextAlignmentRight , FONT_KEY_GOTHIC_24_BOLD       , NULL},      //  disp_net 
+    {NULL, {{0, 139},   {144, 31}} , 0x00, 0xFF, GTextAlignmentLeft  , FONT_KEY_GOTHIC_28_BOLD       , NULL},      //  disp_away
+    {NULL, {{0, 139},   {144, 31}} , 0x00, 0xFF, GTextAlignmentRight , FONT_KEY_GOTHIC_28_BOLD       , NULL},      //  disp_dnd 
 };
 
 static struct {
@@ -31,7 +31,7 @@ static struct {
 } bg[] = {
     {NULL, {{0, 0}, {144, 21}}, 0xC0},
     {NULL, {{28, 70}, {88, 26}}, 0xC0},
-    {NULL, {{0, 143}, {144, 25}}, 0xC0},
+    {NULL, {{0, 146}, {144, 22}}, 0xC0},
 };
 
 #define BG (sizeof(bg) / sizeof(bg[0]))
