@@ -4,7 +4,7 @@ typedef enum {
   disp_none,
   disp_date,
   disp_pchg,
-  disp_time,
+  disp_home,
   disp_wbat,
   disp_noti,
   disp_pbat,
@@ -16,6 +16,7 @@ typedef enum {
   disp_end
 } disp_t;
 
-void disp_create(disp_t index, Layer *window_layer);
-void disp_destroy(disp_t index);
+
+void disp_create(Layer *window_layer);
+void disp_destroy();
 void disp_set(disp_t index, char *text);

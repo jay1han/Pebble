@@ -1,7 +1,8 @@
 #include <pebble.h>
 
-#include "time.h"
-#include "charge.h"
+#include "display.h"
+#include "watch.h"
+#include "phone.h"
 
 static Window *s_main_window;
 
@@ -15,15 +16,12 @@ static void charge_handler(BatteryChargeState charge_state) {
 
 static void main_window_load(Window *window) {
   Layer *window_layer = window_get_root_layer(window);
-  GRect bounds = layer_get_bounds(window_layer);
 
-  time_create(window_layer, &bounds);
-  charge_create(window_layer, &bounds);
+  disp_create(window_layer);
 }
 
 static void main_window_unload(Window *window) {
-  time_destroy();
-  charge_destroy();
+  disp_destroy();
 }
 
 static void init() {
@@ -37,9 +35,12 @@ static void init() {
   window_stack_push(s_main_window, true);
 
   time_update();
-
   tick_timer_service_subscribe(MINUTE_UNIT, tick_handler);
+
+  charge_update(battery_state_service_peek());
   battery_state_service_subscribe(charge_handler);
+
+  phone_init();
 }
 
 static void deinit() {
