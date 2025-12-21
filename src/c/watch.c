@@ -4,7 +4,7 @@
 #include "watch.h"
 
 static char home[8]  = "12:00";
-static char away[12] = "Mon 00:00";
+static char away[8]  = "00:00";
 static char date[12] = "Mon 31/12";
 
 void time_update() {
@@ -18,7 +18,7 @@ void time_update() {
   disp_set(disp_date, date);
 
   temp += 8 * 3600;
-  strftime(away, sizeof(away), "%a %H:%M", localtime(&temp));
+  strftime(away, sizeof(away), "%H:%M", localtime(&temp));
   disp_set(disp_away, away);
 }
 

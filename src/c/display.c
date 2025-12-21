@@ -9,17 +9,17 @@ static struct {
     GTextAlignment align;
     const char *font;
 } disp[disp_end] = {
-    {NULL, {{0, -10},   {144, 31}}, 0xFF, GTextAlignmentLeft  , FONT_KEY_GOTHIC_28_BOLD       },      //  disp_date
+    {NULL, {{0, -10},   {144, 31}}, 0xFF, GTextAlignmentCenter, FONT_KEY_GOTHIC_28_BOLD       },      //  disp_date
+    {NULL, {{0, -10},   {144, 31}}, 0xFF, GTextAlignmentLeft  , FONT_KEY_GOTHIC_28_BOLD       },      //  disp_dnd 
     {NULL, {{0, -10},   {144, 31}}, 0xFF, GTextAlignmentRight , FONT_KEY_GOTHIC_28_BOLD       },      //  disp_pchg
     {NULL, {{0, 14},    {144, 51}}, 0xC0, GTextAlignmentCenter, FONT_KEY_ROBOTO_BOLD_SUBSET_49},      //  disp_home
     {NULL, {{0, 64},    {144, 31}}, 0xFF, GTextAlignmentCenter, FONT_KEY_GOTHIC_28_BOLD       },      //  disp_noti
-    {NULL, {{0, 64},    {144, 31}}, 0xC0, GTextAlignmentLeft  , FONT_KEY_GOTHIC_28_BOLD       },      //  disp_wbat
-    {NULL, {{0, 64},    {144, 31}}, 0xC0, GTextAlignmentRight , FONT_KEY_GOTHIC_28_BOLD       },      //  disp_pbat
-    {NULL, {{0, 94},    {144, 29}}, 0xC0, GTextAlignmentLeft  , FONT_KEY_GOTHIC_24_BOLD       },      //  disp_bt  
+    {NULL, {{0, 94},    {180, 29}}, 0xC0, GTextAlignmentLeft  , FONT_KEY_GOTHIC_24_BOLD       },      //  disp_bt  
     {NULL, {{0, 115},   {124, 29}}, 0xC0, GTextAlignmentLeft  , FONT_KEY_GOTHIC_24_BOLD       },      //  disp_wifi
     {NULL, {{124, 115}, {20, 29}},  0xC0, GTextAlignmentRight , FONT_KEY_GOTHIC_24_BOLD       },      //  disp_net 
-    {NULL, {{0, 139},   {144, 31}}, 0xFF, GTextAlignmentLeft  , FONT_KEY_GOTHIC_28_BOLD       },      //  disp_away
-    {NULL, {{0, 139},   {144, 31}}, 0xFF, GTextAlignmentRight , FONT_KEY_GOTHIC_28_BOLD       },      //  disp_dnd 
+    {NULL, {{0, 139},   {144, 31}}, 0xFF, GTextAlignmentCenter, FONT_KEY_GOTHIC_28_BOLD       },      //  disp_away
+    {NULL, {{0, 139},   {144, 31}}, 0xFF, GTextAlignmentLeft  , FONT_KEY_GOTHIC_28_BOLD       },      //  disp_wbat
+    {NULL, {{0, 139},   {144, 31}}, 0xFF, GTextAlignmentRight , FONT_KEY_GOTHIC_28_BOLD       },      //  disp_pbat
 };
 
 static struct {
@@ -27,8 +27,8 @@ static struct {
     GRect rect;
     uint8_t color;
 } bg[] = {
-    {NULL, {{0, 0}, {144, 21}}, 0xC0},
-    {NULL, {{28, 70}, {88, 26}}, 0xC0},
+    {NULL, {{0, 0},   {144, 21}}, 0xC0},
+    {NULL, {{0, 70},  {144, 26}}, 0xC0},
     {NULL, {{0, 146}, {144, 22}}, 0xC0},
 };
 
@@ -50,6 +50,7 @@ void disp_create(Layer *window_layer) {
         text_layer_set_text(layer, "");
         text_layer_set_font(layer, fonts_get_system_font(disp[i].font));
         text_layer_set_text_alignment(layer, disp[i].align);
+	text_layer_set_overflow_mode(layer, GTextOverflowModeTrailingEllipsis);
         layer_add_child(window_layer, text_layer_get_layer(layer));
         disp[i].layer = layer;
     }

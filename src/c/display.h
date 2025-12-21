@@ -2,16 +2,16 @@
 
 typedef enum {
   disp_date = 0,
+  disp_dnd ,
   disp_pchg,
   disp_home,
   disp_noti,
-  disp_wbat,
-  disp_pbat,
   disp_bt  ,
   disp_wifi,
   disp_net ,
   disp_away,
-  disp_dnd ,
+  disp_wbat,
+  disp_pbat,
   disp_end
 } disp_t;
 
