@@ -6,10 +6,10 @@
 static char pbat[4]  = "80";
 static char pchg[4]  = "C";
 static char net[4]   = "5G";
-static char wifi[20] = "1234567890123456789";
-static char bt[20]   = "1234567890123456789";
+static char wifi[20] = "ClimbingDistrict";
+static char bt[20]   = "Phantom:90";
 static char dnd[4]   = "X";
-static char noti[10] = "GKLMOSTWZ";
+static char noti[12] = "GKLMOSTWZ+";
 
 void phone_init() {
   disp_set(disp_noti, noti);

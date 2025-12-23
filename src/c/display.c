@@ -12,14 +12,14 @@ static struct {
     {NULL, {{0, -10},   {144, 31}}, 0xFF, GTextAlignmentCenter, FONT_KEY_GOTHIC_28_BOLD       },      //  disp_date
     {NULL, {{0, -10},   {144, 31}}, 0xFF, GTextAlignmentLeft  , FONT_KEY_GOTHIC_28_BOLD       },      //  disp_dnd 
     {NULL, {{0, -10},   {144, 31}}, 0xFF, GTextAlignmentRight , FONT_KEY_GOTHIC_28_BOLD       },      //  disp_pchg
-    {NULL, {{0, 14},    {144, 51}}, 0xC0, GTextAlignmentCenter, FONT_KEY_ROBOTO_BOLD_SUBSET_49},      //  disp_home
-    {NULL, {{0, 64},    {144, 31}}, 0xFF, GTextAlignmentCenter, FONT_KEY_GOTHIC_28_BOLD       },      //  disp_noti
-    {NULL, {{0, 94},    {180, 29}}, 0xC0, GTextAlignmentLeft  , FONT_KEY_GOTHIC_24_BOLD       },      //  disp_bt  
-    {NULL, {{0, 115},   {124, 29}}, 0xC0, GTextAlignmentLeft  , FONT_KEY_GOTHIC_24_BOLD       },      //  disp_wifi
-    {NULL, {{124, 115}, {20, 29}},  0xC0, GTextAlignmentRight , FONT_KEY_GOTHIC_24_BOLD       },      //  disp_net 
-    {NULL, {{0, 139},   {144, 31}}, 0xFF, GTextAlignmentCenter, FONT_KEY_GOTHIC_28_BOLD       },      //  disp_away
-    {NULL, {{0, 139},   {144, 31}}, 0xFF, GTextAlignmentLeft  , FONT_KEY_GOTHIC_28_BOLD       },      //  disp_wbat
-    {NULL, {{0, 139},   {144, 31}}, 0xFF, GTextAlignmentRight , FONT_KEY_GOTHIC_28_BOLD       },      //  disp_pbat
+    {NULL, {{0, 16},    {144, 51}}, 0xC0, GTextAlignmentCenter, FONT_KEY_ROBOTO_BOLD_SUBSET_49},      //  disp_home
+    {NULL, {{0, 68},    {144, 31}}, 0xFF, GTextAlignmentCenter, FONT_KEY_GOTHIC_28_BOLD       },      //  disp_noti
+    {NULL, {{0, 96},    {190, 29}}, 0xC0, GTextAlignmentLeft  , FONT_KEY_GOTHIC_24_BOLD       },      //  disp_wifi
+    {NULL, {{0, 117},   {124, 29}}, 0xC0, GTextAlignmentLeft  , FONT_KEY_GOTHIC_24_BOLD       },      //  disp_bt  
+    {NULL, {{124, 117}, {20, 29}},  0xC0, GTextAlignmentRight , FONT_KEY_GOTHIC_24_BOLD       },      //  disp_net 
+    {NULL, {{0, 140},   {144, 31}}, 0xFF, GTextAlignmentCenter, FONT_KEY_GOTHIC_28_BOLD       },      //  disp_away
+    {NULL, {{0, 140},   {144, 31}}, 0xFF, GTextAlignmentLeft  , FONT_KEY_GOTHIC_28_BOLD       },      //  disp_wbat
+    {NULL, {{0, 140},   {144, 31}}, 0xFF, GTextAlignmentRight , FONT_KEY_GOTHIC_28_BOLD       },      //  disp_pbat
 };
 
 static struct {
@@ -28,8 +28,8 @@ static struct {
     uint8_t color;
 } bg[] = {
     {NULL, {{0, 0},   {144, 21}}, 0xC0},
-    {NULL, {{0, 70},  {144, 26}}, 0xC0},
-    {NULL, {{0, 146}, {144, 22}}, 0xC0},
+    {NULL, {{0, 74},  {144, 26}}, 0xC0},
+    {NULL, {{0, 147}, {144, 22}}, 0xC0},
 };
 
 #define BG (sizeof(bg) / sizeof(bg[0]))

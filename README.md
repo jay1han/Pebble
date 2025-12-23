@@ -2,6 +2,8 @@
 
 A Pebble watchface including all the features I need.
 
+![Screenshot](screenshot.png)
+
 ### Screen size
 
 | Platform       | Screen size |
@@ -22,22 +24,22 @@ A Pebble watchface including all the features I need.
 | `date` | -10   | Center   | Date           | `Sun 31 Dec` | Gothic 28 |
 | `dnd`  | -10   | Left     | Quiet mode     | `X`          | Gothic 28 |
 | `pchg` | -10   | Right    | Phone charging | `C`          | Gothic 28 |
-| `home` | 14    | Line     | Home time      | `23:39`      | Roboto 49 |
-| `noti` | 64    | Center   | Notifications  | `GK`         | Gothic 28 |
-| `bt`   | 94    | Left     | Bluetooth      | `Bose:90`    | Gothic 24 |
-| `wifi` | 115   | Left     | WiFi           | `SFR_box`    | Gothic 24 |
-| `net`  | 115   | Right    | Network        | `4G`         | Gothic 24 |
-| `away` | 139   | Center   | Away date/time | `03:39`      | Gothic 28 |
-| `wbat` | 139   | Left     | Pebble Battery | `99`         | Gothic 28 |
-| `pbat` | 139   | Right    | Phone Battery  | `99`         | Gothic 28 |
+| `home` | 16    | Line     | Home time      | `23:39`      | Roboto 49 |
+| `noti` | 68    | Center   | Notifications  | `GK`         | Gothic 28 |
+| `wifi` | 96    | Left     | WiFi           | `SFR_box`    | Gothic 24 |
+| `bt`   | 117   | Left     | Bluetooth      | `Bose:90`    | Gothic 24 |
+| `net`  | 117   | Right    | Network        | `4G`         | Gothic 24 |
+| `away` | 140   | Center   | Away date/time | `03:39`      | Gothic 28 |
+| `wbat` | 140   | Left     | Pebble Battery | `99`         | Gothic 28 |
+| `pbat` | 140   | Right    | Phone Battery  | `99`         | Gothic 28 |
 
 Black background
 
 - (0, 0, 144, 21): `date` and `pchg`
 
-- (0, 70, 144, 26): `noti`
+- (0, 72, 144, 26): `noti`
 
-- (0, 146, 144, 22): `away` and `dnd`
+- (0, 147, 144, 22): `away` and `dnd`
 
 # Display items
 
@@ -90,7 +92,7 @@ Examples
 | Item          | Info/Input                                         |
 |---------------|----------------------------------------------------|
 | Pebble watch  | Connection status                                  |
-| Notifications | Confirm access or link to settings                 |
+| Permisison    | Confirm access or link to settings                 |
 | Away timezone | Hours, Minutes (+ or -)                            |
 | Notifications | (list up to 9) Package name, Letter                |
 | Bluetooth     | (list up to 9) Device ID, Mnemonic (up to 5 chars) |
