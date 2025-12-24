@@ -2,7 +2,7 @@
 
 A Pebble watchface including all the features I need.
 
-![Screenshot](screenshot.png)
+![Screenshot](screenshot.gif)
 
 ### Screen size
 
