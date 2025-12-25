@@ -33,7 +33,7 @@ void time_update() {
 }
 
 void tz_change(int minutes) {
-    tz = minutes * 60;
+    tz = minutes;
     tz_update(NULL);
 }
 
