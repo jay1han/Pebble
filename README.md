@@ -157,7 +157,7 @@ Examples
 
 | ID | Meaning             | Parameters |
 |----|---------------------|------------|
-| 1  | Info                | 12, 13     |
+| 1  | Info                | 2, 12, 13  |
 | 2  | Timezone            | 2          |
 | 3  | Phone DND           | 3          |
 | 4  | Phone charge status | 4, 5       |

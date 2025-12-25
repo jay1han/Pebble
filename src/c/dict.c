@@ -61,8 +61,10 @@ void send_info() {
     WatchInfoVersion version = watch_info_get_firmware_version();
     uint32_t version_u32 = ((uint32_t)version.major << 16) | ((uint32_t)version.minor << 8) | (uint32_t)version.patch;
     dict_write_uint32(iter, KEY_VERSION_U32, version_u32);
+    dict_write_int16(iter, KEY_TZ_MINS_I16, tz_get());
     
     app_message_outbox_send();
+    connection_update(false);
 }
 
 void dict_parse(DictionaryIterator *iter, void *context) {

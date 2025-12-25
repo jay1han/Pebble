@@ -37,6 +37,10 @@ void tz_change(int minutes) {
     tz_update(NULL);
 }
 
+int tz_get() {
+    return tz;
+}
+
 static char wbat[4] = "00";
 
 void charge_update(BatteryChargeState charge_state) {
