@@ -6,31 +6,46 @@
 static char home[8]  = "12:00";
 static char away[8]  = "00:00";
 static char date[12] = "Mon 31/12";
+static int tz = 8 * 60;
+
+static void tz_update(time_t *temp) {
+    time_t now;
+    if (temp == NULL) {
+        now = time(NULL);
+        temp = &now;
+    }
+    *temp += tz * 60;
+    strftime(away, sizeof(away), "%H:%M", localtime(temp));
+    disp_set(disp_away, away);
+}
 
 void time_update() {
-  time_t temp = time(NULL);
-  struct tm *now = localtime(&temp);
+    time_t temp = time(NULL);
+    struct tm *now = localtime(&temp);
   
-  strftime(home, sizeof(home), "%H:%M", now);
-  disp_set(disp_home, home);
+    strftime(home, sizeof(home), "%H:%M", now);
+    disp_set(disp_home, home);
 
-  strftime(date, sizeof(date), "%a %d %b", now);
-  disp_set(disp_date, date);
+    strftime(date, sizeof(date), "%a %d %b", now);
+    disp_set(disp_date, date);
 
-  temp += 8 * 3600;
-  strftime(away, sizeof(away), "%H:%M", localtime(&temp));
-  disp_set(disp_away, away);
+    tz_update(&temp);
+}
+
+void tz_change(int minutes) {
+    tz = minutes * 60;
+    tz_update(NULL);
 }
 
 static char wbat[4] = "00";
 
 void charge_update(BatteryChargeState charge_state) {
 
-  if (charge_state.charge_percent >= 100) strcpy(wbat, "00");
-  else {
-    snprintf(wbat, sizeof(wbat), "%d", charge_state.charge_percent);
-  }
-  disp_set(disp_wbat, wbat);
+    if (charge_state.charge_percent >= 100) strcpy(wbat, "00");
+    else {
+        snprintf(wbat, sizeof(wbat), "%d", charge_state.charge_percent);
+    }
+    disp_set(disp_wbat, wbat);
 }
 
 static char conn[4] = "x";
