@@ -32,3 +32,28 @@ void charge_update(BatteryChargeState charge_state) {
   }
   disp_set(disp_wbat, wbat);
 }
+
+static char conn[4] = "x";
+static bool conn_app = false;
+static bool conn_kit = false;
+
+static void connection_disp() {
+    if (conn_app) {
+        if (conn_kit) strcpy(conn, "C");
+        else strcpy(conn, "-");
+    } else {
+        if (conn_kit) strcpy(conn, "?");
+        else strcpy(conn, "X");
+    }
+    disp_set(disp_conn, conn);
+}
+
+void connection_update(bool connected) {
+    conn_app = connected;
+    connection_disp();
+}
+
+void pebblekit_update(bool connected) {
+    conn_kit = connected;
+    connection_disp();
+}

@@ -4,6 +4,7 @@ typedef enum {
   disp_date = 0,
   disp_dnd ,
   disp_pchg,
+  disp_conn,
   disp_home,
   disp_noti,
   disp_wifi,
