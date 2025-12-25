@@ -137,35 +137,35 @@ Examples
 
 ## Dictionary keys
 
-| Key | Meaning          | Type   | Note           |
-|-----|------------------|--------|----------------|
-| 1   | Message type     | UInt8  | See below      |
-| 2   | Timezone minutes | Int16  | -1439 to +1439 |
-| 3   | Phone DND        | UInt8  | 0 or 1         |
-| 4   | Phone battery %  | UInt8  | 0 to 100       |
-| 5   | Phone charging   | UInt8  | 0 or 1         |
-| 6   | Network type     | UInt8  | 2, 3, 4, 5 (G) |
-| 7   | WiFi SSID        | String | up to 20 bytes |
-| 8   | BT device        | String | up to 20 bytes |
-| 9   | BT battery       | UInt8  | 0 to 100       |
-| 10  | Notifications    | String | up to 12 bytes |
-| 11  | Action           | UInt8  | See below      |
-
-The timezone difference is calculated as `hour * 60 + minute`,
-so a difference of -4.25 should be sent as `hour=-5` and `minute=45`.
+| Key | Meaning          | Type     | Note           |
+|-----|------------------|----------|----------------|
+| 1   | Message type     | Int8     | See below      |
+| 2   | Timezone minutes | Int16    | -1439 to +1439 |
+| 3   | Phone DND        | Int8     | 0 or 1         |
+| 4   | Phone battery %  | Int8     | 0 to 100       |
+| 5   | Phone charging   | Int8     | 0 or 1         |
+| 6   | Network type     | Int8     | 2, 3, 4, 5 (G) |
+| 7   | WiFi SSID        | String   | up to 20 bytes |
+| 8   | BT device        | String   | up to 20 bytes |
+| 9   | BT battery       | Int8     | 0 to 100       |
+| 10  | Notifications    | String   | up to 12 bytes |
+| 11  | Action           | Int8     | See below      |
+| 12  | Model            | Int8     | Defined in SDK |
+| 13  | FW version       | UInt32   | 3 bytes        |
 
 ## Message types
 
 | ID | Meaning             | Parameters |
 |----|---------------------|------------|
-| 1  | Timezone            | 2          |
-| 2  | Phone DND           | 3          |
-| 3  | Phone charge status | 4, 5       |
-| 4  | Network type        | 6          |
-| 5  | WiFi SSID           | 7          |
-| 6  | BT device           | 8, 9       |
-| 7  | Notifications       | 10         |
-| 8  | Action              | 11         |
+| 1  | Info                | 12, 13     |
+| 2  | Timezone            | 2          |
+| 3  | Phone DND           | 3          |
+| 4  | Phone charge status | 4, 5       |
+| 5  | Network type        | 6          |
+| 6  | WiFi SSID           | 7          |
+| 7  | BT device           | 8, 9       |
+| 8  | Notifications       | 10         |
+| 9  | Action              | 11         |
 
 ## Action types
 

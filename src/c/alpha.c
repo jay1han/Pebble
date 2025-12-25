@@ -44,7 +44,7 @@ static void init() {
     phone_init();
 
     app_message_register_inbox_received(dict_parse);
-    app_message_open(32, 16);
+    app_message_open(32, 32);
 }
 
 static void deinit() {
