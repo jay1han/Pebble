@@ -3,14 +3,14 @@
 #include "display.h"
 #include "phone.h"
 
-static char pbat[4]  = "80";
-static char pchg[4]  = "C";
-static char net[4]   = "5G";
-static char wifi[20] = "ClimbingDistrict";
-static char btid[20] = "Phantom";
+static char pbat[4]  = "00";
+static char pchg[4]  = "?";
+static char net[4]   = "0G";
+static char wifi[20] = "";
+static char btid[20] = "";
 static char btc[4]   = "00";
-static char dnd[4]   = "Q";
-static char noti[12] = "GKLMOSTWZ+";
+static char dnd[4]   = "?";
+static char noti[12] = "-";
 
 void phone_init() {
     disp_set(disp_noti, noti);

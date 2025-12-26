@@ -64,7 +64,6 @@ void send_info() {
     dict_write_int16(iter, KEY_TZ_MINS_I16, tz_get());
     
     app_message_outbox_send();
-    connection_update(false);
 }
 
 void dict_parse(DictionaryIterator *iter, void *context) {
