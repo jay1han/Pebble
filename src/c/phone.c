@@ -4,13 +4,13 @@
 #include "phone.h"
 
 static char pbat[4]  = "00";
-static char pchg[4]  = "?";
-static char net[4]   = "0G";
+static char pchg[4]  = "";
+static char net[4]   = "";
 static char wifi[20] = "";
 static char btid[20] = "";
-static char btc[4]   = "00";
-static char dnd[4]   = "?";
-static char noti[12] = "-";
+static char btc[4]   = "";
+static char dnd[4]   = "";
+static char noti[12] = "";
 
 void phone_init() {
     disp_set(disp_noti, noti);
@@ -46,6 +46,7 @@ void phone_bt(char *id, int charge) {
     strncpy(btid, id, sizeof(btid) - 1);
     disp_set(disp_btid, btid);
     if (charge == 100) strcpy(btc, "00");
+    else if (charge == 0) btc[0] = 0;
     else snprintf(btc, sizeof(btc), "%d", charge);
     disp_set(disp_btc, btc);
 }
