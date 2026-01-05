@@ -3,7 +3,7 @@
 #include "display.h"
 #include "phone.h"
 
-static char pbat[4]  = "00";
+static char pbat[4]  = "";
 static char pchg[4]  = "";
 static char net[4]   = "";
 static char wifi[20] = "";
@@ -33,7 +33,8 @@ void phone_charge(int batt, bool charging) {
 }
 
 void phone_net(int gen) {
-    snprintf(net, sizeof(net), "%dG", gen);
+    if (gen > 0) snprintf(net, sizeof(net), "%dG", gen);
+    else net[0] = 0;
     disp_set(disp_net, net);
 }
 
