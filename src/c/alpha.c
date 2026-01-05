@@ -31,6 +31,8 @@ static void init() {
   
     window_stack_push(s_main_window, true);
 
+    app_focus_service_subscribe((AppFocusHandler)disp_focus);
+
     time_update();
     tick_timer_service_subscribe(MINUTE_UNIT, tick_handler);
 
@@ -52,6 +54,7 @@ static void deinit() {
     connection_service_unsubscribe();
     battery_state_service_unsubscribe();
     tick_timer_service_unsubscribe();
+    app_focus_service_unsubscribe();
     window_destroy(s_main_window);
 }
 

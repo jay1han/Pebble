@@ -2,6 +2,8 @@
 
 #include "display.h"
 
+static bool quiet_time = false;
+
 static struct {
     TextLayer *layer;
     GRect rect;
@@ -9,8 +11,9 @@ static struct {
     GTextAlignment align;
     const char *font;
 } disp[disp_end] = {
+    {NULL, {{0, -10},   {144, 31}}, 0xFF, GTextAlignmentLeft  , FONT_KEY_GOTHIC_28_BOLD       },      //  disp_quiet
     {NULL, {{0, -10},   {144, 31}}, 0xFF, GTextAlignmentCenter, FONT_KEY_GOTHIC_28_BOLD       },      //  disp_date
-    {NULL, {{0, -10},   {144, 31}}, 0xFF, GTextAlignmentLeft  , FONT_KEY_GOTHIC_28_BOLD       },      //  disp_dnd 
+    {NULL, {{0, -10},   {144, 31}}, 0xFF, GTextAlignmentLeft  , FONT_KEY_GOTHIC_28_BOLD       },      //  disp_dnd !TODO
     {NULL, {{0, -10},   {144, 31}}, 0xFF, GTextAlignmentRight , FONT_KEY_GOTHIC_28_BOLD       },      //  disp_pchg
     {NULL, {{0, 15},    {144, 31}}, 0xC0, GTextAlignmentLeft ,  FONT_KEY_GOTHIC_18_BOLD       },      //  disp_conn
     {NULL, {{0, 16},    {144, 51}}, 0xC0, GTextAlignmentCenter, FONT_KEY_ROBOTO_BOLD_SUBSET_49},      //  disp_home
@@ -56,6 +59,8 @@ void disp_create(Layer *window_layer) {
         layer_add_child(window_layer, text_layer_get_layer(layer));
         disp[i].layer = layer;
     }
+
+    quiet_time = !quiet_time_is_active();
 }
 
 void disp_destroy(void) {
@@ -70,4 +75,14 @@ void disp_destroy(void) {
 
 void disp_set(disp_t index, char *text) {
     text_layer_set_text(disp[index].layer, text);
+    disp_focus(true);
+}
+
+void disp_focus(bool in_focus) {
+    if (in_focus) {
+        if (quiet_time != quiet_time_is_active()) {
+            quiet_time = !quiet_time;
+            text_layer_set_text(disp[disp_quiet].layer, quiet_time ? "Q" : "");
+        }
+    }
 }
