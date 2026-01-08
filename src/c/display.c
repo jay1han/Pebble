@@ -2,8 +2,6 @@
 
 #include "display.h"
 
-static bool quiet_time = false;
-
 static struct {
     TextLayer *layer;
     GRect rect;
@@ -39,6 +37,17 @@ static struct {
 
 #define BG (sizeof(bg) / sizeof(bg[0]))
 
+static bool quiet_time = false;
+
+static void check_quiet_time() {
+    bool is_active = quiet_time_is_active();
+    APP_LOG(APP_LOG_LEVEL_INFO, "Quiet %d -> %d", (int)quiet_time, (int)is_active);
+    if (quiet_time != is_active) {
+        quiet_time = is_active;
+        text_layer_set_text(disp[disp_quiet].layer, quiet_time ? "Q" : "");
+    }
+}
+
 void disp_create(Layer *window_layer) {
     for (size_t i = 0; i < BG; i++) {
         BitmapLayer *layer = bitmap_layer_create(bg[i].rect);
@@ -60,7 +69,7 @@ void disp_create(Layer *window_layer) {
         disp[i].layer = layer;
     }
 
-    quiet_time = !quiet_time_is_active();
+    check_quiet_time();
 }
 
 void disp_destroy(void) {
@@ -75,14 +84,9 @@ void disp_destroy(void) {
 
 void disp_set(disp_t index, char *text) {
     text_layer_set_text(disp[index].layer, text);
-    disp_focus(true);
+    check_quiet_time();
 }
 
 void disp_focus(bool in_focus) {
-    if (in_focus) {
-        if (quiet_time != quiet_time_is_active()) {
-            quiet_time = !quiet_time;
-            text_layer_set_text(disp[disp_quiet].layer, quiet_time ? "Q" : "");
-        }
-    }
+    if (in_focus) check_quiet_time();
 }
