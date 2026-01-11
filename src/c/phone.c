@@ -10,7 +10,7 @@ static char wifi[20] = "";
 static char btid[20] = "";
 static char btc[4]   = "";
 static char dnd[4]   = "";
-static char noti[12] = "";
+static char noti[16] = "";
 
 void phone_init() {
     disp_set(disp_noti, noti);
