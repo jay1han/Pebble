@@ -17,7 +17,8 @@ enum {
     KEY_NOTI_S12,
     KEY_ACTION_I8,
     KEY_MODEL_I8,
-    KEY_VERSION_U32
+    KEY_VERSION_U32,
+    KEY_WBATT_I8,
 };
 
 typedef enum {
@@ -61,6 +62,7 @@ void send_info() {
     WatchInfoVersion version = watch_info_get_firmware_version();
     uint32_t version_u32 = ((uint32_t)version.major << 16) | ((uint32_t)version.minor << 8) | (uint32_t)version.patch;
     dict_write_uint32(iter, KEY_VERSION_U32, version_u32);
+    dict_write_int8(iter, KEY_WBATT_I8, watch_battery);
     dict_write_int16(iter, KEY_TZ_MINS_I16, tz_get());
     
     app_message_outbox_send();

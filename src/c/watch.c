@@ -43,8 +43,9 @@ int tz_get() {
 
 static char wbat[4] = "00";
 
+int watch_battery = 0;
 void charge_update(BatteryChargeState charge_state) {
-
+    watch_battery = charge_state.charge_percent;
     if (charge_state.charge_percent >= 100) strcpy(wbat, "00");
     else {
         snprintf(wbat, sizeof(wbat), "%d", charge_state.charge_percent);
