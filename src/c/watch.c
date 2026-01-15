@@ -2,6 +2,7 @@
 
 #include "display.h"
 #include "watch.h"
+#include "dict.h"
 
 static char home[8]  = "12:00";
 static char away[8]  = "00:00";
@@ -30,6 +31,8 @@ void time_update() {
     disp_set(disp_date, date);
 
     tz_update(&temp);
+
+    send_batt();
 }
 
 void tz_change(int minutes) {
@@ -42,10 +45,10 @@ int tz_get() {
 }
 
 static char wbat[4] = "00";
+BatteryChargeState watch_battery = {0, false, false};
 
-int watch_battery = 0;
 void charge_update(BatteryChargeState charge_state) {
-    watch_battery = charge_state.charge_percent;
+    watch_battery = charge_state;
     if (charge_state.charge_percent >= 100) strcpy(wbat, "00");
     else {
         snprintf(wbat, sizeof(wbat), "%d", charge_state.charge_percent);

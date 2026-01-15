@@ -19,6 +19,8 @@ enum {
     KEY_MODEL_I8,
     KEY_VERSION_U32,
     KEY_WBATT_I8,
+    KEY_WPLUG_I8,
+    KEY_WCHG_I8,
 };
 
 typedef enum {
@@ -30,6 +32,7 @@ typedef enum {
     MSG_WIFI,
     MSG_BT,
     MSG_NOTI,
+    MSG_WBATT,
     MSG_ACTION
 } msg_type_t;
 
@@ -62,8 +65,19 @@ void send_info() {
     WatchInfoVersion version = watch_info_get_firmware_version();
     uint32_t version_u32 = ((uint32_t)version.major << 16) | ((uint32_t)version.minor << 8) | (uint32_t)version.patch;
     dict_write_uint32(iter, KEY_VERSION_U32, version_u32);
-    dict_write_int8(iter, KEY_WBATT_I8, watch_battery);
     dict_write_int16(iter, KEY_TZ_MINS_I16, tz_get());
+    
+    app_message_outbox_send();
+}
+
+void send_batt() {
+    DictionaryIterator *iter;
+    app_message_outbox_begin(&iter);
+
+    dict_write_int8(iter, KEY_MSG_TYPE_I8, MSG_WBATT);
+    dict_write_int8(iter, KEY_WBATT_I8, watch_battery.charge_percent);
+    dict_write_int8(iter, KEY_WPLUG_I8, watch_battery.is_plugged);
+    dict_write_int8(iter, KEY_WCHG_I8, watch_battery.is_charging);
     
     app_message_outbox_send();
 }
@@ -122,6 +136,8 @@ void dict_parse(DictionaryIterator *iter, void *context) {
             if (tuple->type == TUPLE_CSTRING && tuple->length <= 12)
                 message.notifications = tuple->value->cstring;
             break;
+
+        default: break;
             
         }
         
@@ -130,7 +146,7 @@ void dict_parse(DictionaryIterator *iter, void *context) {
 
     switch(message.message_type) {
 
-    case MSG_INFO: send_info(); break;
+    case MSG_INFO: send_info(); send_batt(); break;
     case MSG_TZ: tz_change(message.timezone_minutes); break;
     case MSG_PHONE_DND: phone_dnd(message.phone_dnd); break;
     case MSG_PHONE_CHG: phone_charge(message.phone_battery, message.phone_charging); break;
@@ -140,5 +156,6 @@ void dict_parse(DictionaryIterator *iter, void *context) {
     case MSG_NOTI: phone_noti(message.notifications); break;
     case MSG_ACTION: break;
         
+    default: break;
     }
 }
