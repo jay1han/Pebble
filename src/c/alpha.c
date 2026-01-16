@@ -47,6 +47,8 @@ static void init() {
 
     app_message_register_inbox_received(dict_parse);
     app_message_open(64, 64);
+
+    send_info();
 }
 
 static void deinit() {

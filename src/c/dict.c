@@ -146,7 +146,7 @@ void dict_parse(DictionaryIterator *iter, void *context) {
 
     switch(message.message_type) {
 
-    case MSG_INFO: send_info(); send_batt(); break;
+    case MSG_INFO: send_info(); break;
     case MSG_TZ: tz_change(message.timezone_minutes); break;
     case MSG_PHONE_DND: phone_dnd(message.phone_dnd); break;
     case MSG_PHONE_CHG: phone_charge(message.phone_battery, message.phone_charging); break;
@@ -154,6 +154,7 @@ void dict_parse(DictionaryIterator *iter, void *context) {
     case MSG_WIFI: phone_wifi(message.wifi_ssid); break;
     case MSG_BT: phone_bt(message.bt_device, message.bt_battery); break;
     case MSG_NOTI: phone_noti(message.notifications); break;
+    case MSG_WBATT: send_batt(); break;
     case MSG_ACTION: break;
         
     default: break;
