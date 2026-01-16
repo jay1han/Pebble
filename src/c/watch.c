@@ -60,7 +60,7 @@ static bool conn_app = false;
 static bool conn_kit = false;
 
 static void connection_disp() {
-    disp_disconnect(conn_app && conn_kit);
+    disp_connected(conn_app && conn_kit);
 }
 
 void connection_update(bool connected) {

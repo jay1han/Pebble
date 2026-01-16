@@ -1,6 +1,7 @@
 #include <pebble.h>
 
 #include "display.h"
+#include "phone.h"
 
 static Layer *s_window_layer;
 
@@ -39,7 +40,7 @@ static struct {
     BitmapLayer *layer;
     GRect rect;
     uint8_t color;
-} disc_layer = {NULL, {{0, 0},   {144, 21}}, 0xC0};
+} disc_layer = {NULL, {{0, 96}, {144, 51}}, 0xC0};
 
 #define BG (sizeof(bg) / sizeof(bg[0]))
 
@@ -80,8 +81,11 @@ void disp_create(Layer *window_layer) {
     check_quiet_time();
 }
 
-void disp_disconnect(bool blackout) {
-    if (blackout) {
+void disp_connected(bool connected) {
+    if (!connected) {
+        phone_charge(0, 0);
+        phone_dnd(false);
+        phone_noti("");
         if (s_window_layer != NULL) {
             BitmapLayer *layer = bitmap_layer_create(disc_layer.rect);
             bitmap_layer_set_background_color(layer, (GColor8){.argb=disc_layer.color});

@@ -21,4 +21,4 @@ void disp_create(Layer *window_layer);
 void disp_destroy();
 void disp_set(disp_t index, char *text);
 void disp_focus(bool in_focus);
-void disp_disconnect(bool blackout);
+void disp_connected(bool connected);
