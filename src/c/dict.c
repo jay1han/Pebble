@@ -14,7 +14,7 @@ enum {
     KEY_WIFI_S20,
     KEY_BTID_S20,
     KEY_BTC_I8,
-    KEY_NOTI_S12,
+    KEY_NOTI_S16,
     KEY_ACTION_I8,
     KEY_MODEL_I8,
     KEY_VERSION_U32,
@@ -132,8 +132,8 @@ void dict_parse(DictionaryIterator *iter, void *context) {
                 message.bt_battery = tuple->value->int8;
             break;
             
-        case KEY_NOTI_S12:
-            if (tuple->type == TUPLE_CSTRING && tuple->length <= 12)
+        case KEY_NOTI_S16:
+            if (tuple->type == TUPLE_CSTRING && tuple->length <= 16)
                 message.notifications = tuple->value->cstring;
             break;
 
