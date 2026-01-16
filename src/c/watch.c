@@ -80,3 +80,12 @@ void pebblekit_update(bool connected) {
     conn_kit = connected;
     connection_disp();
 }
+
+void outbox_failed(DictionaryIterator *iter, AppMessageResult reason, void *context) {
+}
+
+void outbox_sent(DictionaryIterator *iter, void *context) {
+}
+
+void inbox_dropped(AppMessageResult reason, void *context) {
+}

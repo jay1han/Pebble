@@ -46,6 +46,9 @@ static void init() {
     phone_init();
 
     app_message_register_inbox_received(dict_parse);
+    app_message_register_inbox_dropped(inbox_dropped);
+    app_message_register_outbox_failed(outbox_failed);
+    app_message_register_outbox_sent(outbox_sent);
     app_message_open(64, 64);
 
     send_info();
