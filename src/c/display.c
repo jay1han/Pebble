@@ -2,6 +2,8 @@
 
 #include "display.h"
 
+static Layer *s_window_layer;
+
 static struct {
     TextLayer *layer;
     GRect rect;
@@ -12,7 +14,6 @@ static struct {
     {NULL, {{0, -10},   {144, 31}}, 0xFF, GTextAlignmentLeft  , FONT_KEY_GOTHIC_28_BOLD       },      //  disp_quiet
     {NULL, {{0, -10},   {144, 31}}, 0xFF, GTextAlignmentCenter, FONT_KEY_GOTHIC_28_BOLD       },      //  disp_date
     {NULL, {{0, -10},   {144, 31}}, 0xFF, GTextAlignmentRight , FONT_KEY_GOTHIC_28_BOLD       },      //  disp_dnd !TODO
-    {NULL, {{0, 96},    {144, 24}}, 0xC0, GTextAlignmentLeft ,  FONT_KEY_GOTHIC_18_BOLD       },      //  disp_conn
     {NULL, {{0, 16},    {144, 51}}, 0xC0, GTextAlignmentCenter, FONT_KEY_ROBOTO_BOLD_SUBSET_49},      //  disp_home
     {NULL, {{0, 68},    {144, 31}}, 0xFF, GTextAlignmentCenter, FONT_KEY_GOTHIC_28_BOLD       },      //  disp_noti
     {NULL, {{30, 96},   {144, 29}}, 0xC0, GTextAlignmentLeft  , FONT_KEY_GOTHIC_24_BOLD       },      //  disp_btc
@@ -34,6 +35,12 @@ static struct {
     {NULL, {{0, 147}, {144, 22}}, 0xC0},
 };
 
+static struct {
+    BitmapLayer *layer;
+    GRect rect;
+    uint8_t color;
+} disc_layer = {NULL, {{0, 0},   {144, 21}}, 0xC0};
+
 #define BG (sizeof(bg) / sizeof(bg[0]))
 
 static bool quiet_time = false;
@@ -48,6 +55,8 @@ static void check_quiet_time() {
 }
 
 void disp_create(Layer *window_layer) {
+    s_window_layer = window_layer;
+    
     for (size_t i = 0; i < BG; i++) {
         BitmapLayer *layer = bitmap_layer_create(bg[i].rect);
         bitmap_layer_set_background_color(layer, (GColor8){.argb=bg[i].color});
@@ -71,6 +80,23 @@ void disp_create(Layer *window_layer) {
     check_quiet_time();
 }
 
+void disp_disconnect(bool blackout) {
+    if (blackout) {
+        if (s_window_layer != NULL) {
+            BitmapLayer *layer = bitmap_layer_create(disc_layer.rect);
+            bitmap_layer_set_background_color(layer, (GColor8){.argb=disc_layer.color});
+            bitmap_layer_set_compositing_mode(layer, GCompOpAnd);
+            layer_add_child(s_window_layer, bitmap_layer_get_layer(layer));
+            disc_layer.layer = layer;
+        }
+    } else {
+        if (disc_layer.layer != NULL) {
+            bitmap_layer_destroy(disc_layer.layer);
+            disc_layer.layer = NULL;
+        }
+    }
+}
+
 void disp_destroy(void) {
     for (disp_t i = 0; i < disp_end; i++) {
         text_layer_destroy(disp[i].layer);
@@ -79,6 +105,8 @@ void disp_destroy(void) {
     for (size_t i = 0; i < BG; i++) {
         bitmap_layer_destroy(bg[i].layer);
     }
+
+    s_window_layer = NULL;
 }
 
 void disp_set(disp_t index, char *text) {

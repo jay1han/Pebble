@@ -4,7 +4,6 @@ typedef enum {
     disp_quiet = 0,
     disp_date,
     disp_dnd ,
-    disp_conn,
     disp_home,
     disp_noti,
     disp_btc,
@@ -22,3 +21,4 @@ void disp_create(Layer *window_layer);
 void disp_destroy();
 void disp_set(disp_t index, char *text);
 void disp_focus(bool in_focus);
+void disp_disconnect(bool blackout);
