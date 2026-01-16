@@ -4,7 +4,6 @@ typedef enum {
     disp_quiet = 0,
     disp_date,
     disp_dnd ,
-    disp_pchg,
     disp_conn,
     disp_home,
     disp_noti,

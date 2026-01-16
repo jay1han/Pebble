@@ -3,8 +3,7 @@
 #include "display.h"
 #include "phone.h"
 
-static char pbat[4]  = "";
-static char pchg[4]  = "";
+static char pbat[8]  = "";
 static char net[4]   = "";
 static char wifi[20] = "";
 static char btid[20] = "";
@@ -15,7 +14,6 @@ static char noti[16] = "";
 void phone_init() {
     disp_set(disp_noti, noti);
     disp_set(disp_pbat, pbat);
-    disp_set(disp_pchg, pchg);
     disp_set(disp_btid, btid);
     disp_set(disp_btc , btc);
     disp_set(disp_dnd , dnd);
@@ -24,12 +22,13 @@ void phone_init() {
 }
 
 void phone_charge(int batt, bool charging) {
-    snprintf(pbat, sizeof(pbat), "%d", batt);
+    char *p = pbat;
+    if (charging) *p++ = '+';
+    if (batt >= 100) strcat(p, "00");
+    else {
+        snprintf(p, sizeof(pbat)-1, "%d", batt);
+    }
     disp_set(disp_pbat, pbat);
-  
-    pchg[0] = charging ? 'C' : ' ';
-    pchg[1] = 0;
-    disp_set(disp_pchg, pchg);
 }
 
 void phone_net(int gen) {
