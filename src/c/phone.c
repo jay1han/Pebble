@@ -23,10 +23,11 @@ void phone_init() {
 
 void phone_charge(int batt, bool charging) {
     char *p = pbat;
-    if (charging) *p++ = '+';
-    if (batt >= 100) strncat(p, "00", 3);
-    else if (batt <= 0) p[0] = 0;
+    if (charging) *(p++) = '+';
+    if (batt >= 100) strncpy(p, "00", 3);
+    else if (batt <= 0) pbat[0] = 0;
     else snprintf(p, 3, "%d", batt);
+    pbat[3] = 0;
     disp_set(disp_pbat, pbat);
 }
 
@@ -46,6 +47,7 @@ void phone_bt(char *id, int charge) {
     strncpy(btid, id, sizeof(btid));
     btid[sizeof(btid) - 1] = 0;
     disp_set(disp_btid, btid);
+    
     if (charge >= 100) strcpy(btc, "00");
     else if (charge <= 0) btc[0] = 0;
     else snprintf(btc, 3, "%d", charge);

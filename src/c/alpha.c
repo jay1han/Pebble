@@ -49,9 +49,9 @@ static void init() {
     app_message_register_inbox_dropped(inbox_dropped);
     app_message_register_outbox_failed(outbox_failed);
     app_message_register_outbox_sent(outbox_sent);
-    app_message_open(64, 64);
+    app_message_open(128, 128);
 
-    send_info();
+    send_info(true);
 }
 
 static void deinit() {
