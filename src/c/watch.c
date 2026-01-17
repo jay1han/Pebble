@@ -32,8 +32,6 @@ void time_update() {
     disp_set(disp_date, date);
 
     tz_update(&temp);
-
-    send_batt();
 }
 
 void tz_change(int minutes) {
@@ -54,6 +52,7 @@ void charge_update(BatteryChargeState charge_state) {
         snprintf(wbat, sizeof(wbat), "%d", charge_state.charge_percent);
     }
     disp_set(disp_wbat, wbat);
+    send_batt();
 }
 
 static bool conn_app = false;
