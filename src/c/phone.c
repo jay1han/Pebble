@@ -3,13 +3,13 @@
 #include "display.h"
 #include "phone.h"
 
-static char pbat[4]  = "";
-static char net[4]   = "";
-static char wifi[20] = "";
-static char btid[20] = "";
-static char btc[4]   = "";
-static char dnd[4]   = "";
-static char noti[16] = "";
+static char pbat[4];
+static char net[4];
+static char wifi[20];
+static char btid[20];
+static char btc[4];
+static char dnd[4];
+static char noti[16];
 
 void phone_init() {
     disp_set(disp_noti, noti);
@@ -24,7 +24,7 @@ void phone_init() {
 void phone_charge(int batt, bool charging) {
     char *p = pbat;
     if (charging) *p++ = '+';
-    if (batt >= 100) strcat(p, "00");
+    if (batt >= 100) strncat(p, "00", 3);
     else if (batt <= 0) p[0] = 0;
     else snprintf(p, 3, "%d", batt);
     disp_set(disp_pbat, pbat);

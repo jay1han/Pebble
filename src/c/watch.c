@@ -4,10 +4,11 @@
 #include "watch.h"
 #include "dict.h"
 
-static char home[8]  = "12:00";
-static char away[8]  = "00:00";
-static char date[12] = "Mon 31/12";
+static char home[8];
+static char away[8];
+static char date[12];
 static int tz = 8 * 60;
+static char wbat[4];
 
 static void tz_update(time_t *temp) {
     time_t now;
@@ -44,7 +45,6 @@ int tz_get() {
     return tz;
 }
 
-static char wbat[4] = "00";
 BatteryChargeState watch_battery = {0, false, false};
 
 void charge_update(BatteryChargeState charge_state) {
