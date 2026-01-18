@@ -9,23 +9,25 @@ static struct {
     TextLayer *layer;
     GRect rect;
     uint8_t color;
+    int8_t bg_count;
+    int8_t bg_index;
     GTextAlignment align;
     const char *font;
 } disp[disp_end] = {
-    {NULL, {{0, -10},   {144, 31}}, 0xFF, GTextAlignmentLeft  , FONT_KEY_GOTHIC_28_BOLD       },      //  disp_quiet
-    {NULL, {{0, -10},   {144, 31}}, 0xFF, GTextAlignmentCenter, FONT_KEY_GOTHIC_28_BOLD       },      //  disp_date
-    {NULL, {{0, -10},   {144, 31}}, 0xFF, GTextAlignmentRight , FONT_KEY_GOTHIC_28_BOLD       },      //  disp_dnd !TODO
-    {NULL, {{0, 16},    {144, 51}}, 0xC0, GTextAlignmentCenter, FONT_KEY_ROBOTO_BOLD_SUBSET_49},      //  disp_home
-    {NULL, {{0, 68},    {144, 31}}, 0xFF, GTextAlignmentCenter, FONT_KEY_GOTHIC_28_BOLD       },      //  disp_noti
-    {NULL, {{30, 98},   {114, 29}}, 0xC0, GTextAlignmentRight , FONT_KEY_GOTHIC_24_BOLD       },      //  disp_btc
-    {NULL, {{30, 98},   {144, 29}}, 0xC0, GTextAlignmentLeft  , FONT_KEY_GOTHIC_24_BOLD       },      //  disp_btid
-    {NULL, {{4, 98},    {144, 31}}, 0xC0, GTextAlignmentLeft  , FONT_KEY_GOTHIC_24_BOLD       },      //  disp_sim
-    {NULL, {{2, 116},   {144, 31}}, 0xC0, GTextAlignmentLeft  , FONT_KEY_GOTHIC_28_BOLD       },      //  disp_net 
-    {NULL, {{30, 116},  {144, 31}}, 0xC0, GTextAlignmentLeft  , FONT_KEY_GOTHIC_28_BOLD       },      //  disp_plmn
-    {NULL, {{30, 118},  {144, 29}}, 0xC0, GTextAlignmentLeft  , FONT_KEY_GOTHIC_24_BOLD       },      //  disp_wifi
-    {NULL, {{0, 140},   {140, 31}}, 0xFF, GTextAlignmentCenter, FONT_KEY_GOTHIC_28_BOLD       },      //  disp_away
-    {NULL, {{0, 140},   {144, 31}}, 0xFF, GTextAlignmentLeft  , FONT_KEY_GOTHIC_28_BOLD       },      //  disp_wbat
-    {NULL, {{0, 140},   {144, 31}}, 0xFF, GTextAlignmentRight , FONT_KEY_GOTHIC_28_BOLD       },      //  disp_pbat
+    {NULL, {{0, -10},   {144, 31}}, 0xFF, 3, -1, GTextAlignmentLeft  , FONT_KEY_GOTHIC_28_BOLD       },      //  disp_quiet
+    {NULL, {{0, -10},   {144, 31}}, 0xFF, 3, -1, GTextAlignmentCenter, FONT_KEY_GOTHIC_28_BOLD       },      //  disp_date
+    {NULL, {{0, -10},   {144, 31}}, 0xFF, 3, -1, GTextAlignmentRight , FONT_KEY_GOTHIC_28_BOLD       },      //  disp_dnd !TODO
+    {NULL, {{0, 16},    {144, 51}}, 0xC0, 3, -1, GTextAlignmentCenter, FONT_KEY_ROBOTO_BOLD_SUBSET_49},      //  disp_home
+    {NULL, {{0, 69},    {144, 31}}, 0xFF, 3, -1, GTextAlignmentCenter, FONT_KEY_GOTHIC_28_BOLD       },      //  disp_noti
+    {NULL, {{30, 97},   {144, 29}}, 0xC0, 3, -1, GTextAlignmentLeft  , FONT_KEY_GOTHIC_24_BOLD       },      //  disp_btid
+    {NULL, {{0, 97},    {143, 29}}, 0xC0, 4,  3, GTextAlignmentRight , FONT_KEY_GOTHIC_24_BOLD       },      //  disp_btc
+    {NULL, {{4, 97},    {144, 31}}, 0xC0, 4, -1, GTextAlignmentLeft  , FONT_KEY_GOTHIC_24_BOLD       },      //  disp_sim
+    {NULL, {{2, 116},   {144, 31}}, 0xC0, 4, -1, GTextAlignmentLeft  , FONT_KEY_GOTHIC_28_BOLD       },      //  disp_net 
+    {NULL, {{30, 116},  {144, 31}}, 0xC0, 4, -1, GTextAlignmentLeft  , FONT_KEY_GOTHIC_28_BOLD       },      //  disp_plmn
+    {NULL, {{30, 118},  {144, 29}}, 0xC0, 4, -1, GTextAlignmentLeft  , FONT_KEY_GOTHIC_24_BOLD       },      //  disp_wifi
+    {NULL, {{0, 140},   {140, 31}}, 0xFF, 4, -1, GTextAlignmentCenter, FONT_KEY_GOTHIC_28_BOLD       },      //  disp_away
+    {NULL, {{0, 140},   {144, 31}}, 0xFF, 4, -1, GTextAlignmentLeft  , FONT_KEY_GOTHIC_28_BOLD       },      //  disp_wbat
+    {NULL, {{0, 140},   {144, 31}}, 0xFF, 4, -1, GTextAlignmentRight , FONT_KEY_GOTHIC_28_BOLD       },      //  disp_pbat
 };
 
 static struct {
@@ -33,9 +35,10 @@ static struct {
     GRect rect;
     uint8_t color;
 } bg[] = {
-    {NULL, {{0, 0},   {144, 21}}, 0xC0},
-    {NULL, {{0, 74},  {144, 28}}, 0xC0},
-    {NULL, {{0, 147}, {144, 22}}, 0xC0},
+    {NULL, {{0, 0},     {144, 21}}, 0xC0},
+    {NULL, {{0, 74},    {144, 29}}, 0xC0},
+    {NULL, {{0, 147},   {144, 22}}, 0xC0},
+    {NULL, {{120, 103}, {24, 20}},  0x3F},
 };
 
 static struct {
@@ -59,16 +62,18 @@ static void check_quiet_time() {
 
 void disp_create(Layer *window_layer) {
     s_window_layer = window_layer;
-    
-    for (size_t i = 0; i < BG; i++) {
-        BitmapLayer *layer = bitmap_layer_create(bg[i].rect);
-        bitmap_layer_set_background_color(layer, (GColor8){.argb=bg[i].color});
-        bitmap_layer_set_compositing_mode(layer, GCompOpAnd);
-        layer_add_child(window_layer, bitmap_layer_get_layer(layer));
-        bg[i].layer = layer;
-    }
+    int8_t bg_index = 0;
     
     for (disp_t i = 0; i < disp_end; i++) {
+        while (bg_index < disp[i].bg_count) {
+            BitmapLayer *layer = bitmap_layer_create(bg[bg_index].rect);
+            bitmap_layer_set_background_color(layer, (GColor8){.argb=bg[bg_index].color});
+            bitmap_layer_set_compositing_mode(layer, GCompOpAnd);
+            layer_add_child(window_layer, bitmap_layer_get_layer(layer));
+            bg[bg_index].layer = layer;
+            bg_index++;
+        }
+        
         TextLayer *layer = text_layer_create(disp[i].rect);
         text_layer_set_background_color(layer, GColorClear);
         text_layer_set_text_color(layer, (GColor8){.argb=disp[i].color});
@@ -116,6 +121,15 @@ void disp_destroy(void) {
 }
 
 void disp_set(disp_t index, char *text) {
+    if (disp[index].bg_index > 0) {
+        if (text[0] != 0){
+            bitmap_layer_set_background_color(bg[disp[index].bg_index].layer, (GColor8){.argb=0xFF});
+            bitmap_layer_set_compositing_mode(bg[disp[index].bg_index].layer, GCompOpAssign);
+        } else {
+            bitmap_layer_set_background_color(bg[disp[index].bg_index].layer, (GColor8){.argb=0x3F});
+            bitmap_layer_set_compositing_mode(bg[disp[index].bg_index].layer, GCompOpAnd);
+        }
+    }
     text_layer_set_text(disp[index].layer, text);
     check_quiet_time();
 }
