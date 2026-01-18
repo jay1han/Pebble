@@ -21,6 +21,8 @@ enum {
     KEY_WBATT_I8,
     KEY_WPLUG_I8,
     KEY_WCHG_I8,
+    KEY_SIM_I8,
+    KEY_CARRIER_S20,
 };
 
 typedef enum {
@@ -49,7 +51,9 @@ static struct {
     bool       phone_dnd;
     int8_t     phone_battery;
     bool       phone_charging;
-    int8_t     network_type;
+    int8_t     network_gen;
+    int8_t     active_sim;
+    char       *carrier;
     char       *wifi_ssid;
     char       *bt_device;
     int8_t     bt_battery;
@@ -118,7 +122,7 @@ void dict_parse(DictionaryIterator *iter, void *context) {
             
         case KEY_NET_I8:
             if (tuple->type == TUPLE_INT && tuple->length == 1)
-                message.network_type = tuple->value->int8;
+                message.network_gen = tuple->value->int8;
             break;
             
         case KEY_WIFI_S20:
@@ -141,6 +145,16 @@ void dict_parse(DictionaryIterator *iter, void *context) {
                 message.notifications = tuple->value->cstring;
             break;
 
+        case KEY_SIM_I8:
+            if (tuple->type == TUPLE_INT && tuple->length == 1)
+                message.active_sim = tuple->value->int8;
+            break;
+
+        case KEY_CARRIER_S20:
+            if (tuple->type == TUPLE_CSTRING && tuple->length <= 20)
+                message.carrier = tuple->value->cstring;
+            break;
+            
         default: break;
             
         }
@@ -154,7 +168,7 @@ void dict_parse(DictionaryIterator *iter, void *context) {
     case MSG_TZ: tz_change(message.timezone_minutes); break;
     case MSG_PHONE_DND: phone_dnd(message.phone_dnd); break;
     case MSG_PHONE_CHG: phone_charge(message.phone_battery, message.phone_charging); break;
-    case MSG_NET: phone_net(message.network_type); break;
+    case MSG_NET: phone_net(message.network_gen, message.active_sim, message.carrier); break;
     case MSG_WIFI: phone_wifi(message.wifi_ssid); break;
     case MSG_BT: phone_bt(message.bt_device, message.bt_battery); break;
     case MSG_NOTI: phone_noti(message.notifications); break;
