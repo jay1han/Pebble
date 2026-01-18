@@ -19,7 +19,7 @@ static struct {
     {NULL, {{0, 68},    {144, 31}}, 0xFF, GTextAlignmentCenter, FONT_KEY_GOTHIC_28_BOLD       },      //  disp_noti
     {NULL, {{30, 96},   {144, 29}}, 0xC0, GTextAlignmentLeft  , FONT_KEY_GOTHIC_24_BOLD       },      //  disp_btc
     {NULL, {{54, 96},   {144, 29}}, 0xC0, GTextAlignmentLeft  , FONT_KEY_GOTHIC_24_BOLD       },      //  disp_btid
-    {NULL, {{2, 96},    {144, 31}}, 0xC0, GTextAlignmentLeft  , FONT_KEY_GOTHIC_24_BOLD       },      //  disp_sim
+    {NULL, {{4, 96},    {144, 31}}, 0xC0, GTextAlignmentLeft  , FONT_KEY_GOTHIC_24_BOLD       },      //  disp_sim
     {NULL, {{2, 115},   {144, 31}}, 0xC0, GTextAlignmentLeft  , FONT_KEY_GOTHIC_28_BOLD       },      //  disp_net 
     {NULL, {{30, 115},  {144, 31}}, 0xC0, GTextAlignmentLeft  , FONT_KEY_GOTHIC_28_BOLD       },      //  disp_plmn
     {NULL, {{30, 117},  {144, 29}}, 0xC0, GTextAlignmentLeft  , FONT_KEY_GOTHIC_24_BOLD       },      //  disp_wifi
