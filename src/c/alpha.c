@@ -33,6 +33,8 @@ static void init() {
 
     app_focus_service_subscribe((AppFocusHandler)disp_focus);
 
+    tz_init();
+        
     time_update();
     tick_timer_service_subscribe(MINUTE_UNIT, tick_handler);
 
@@ -55,6 +57,8 @@ static void init() {
 }
 
 static void deinit() {
+    phone_deinit();
+    
     app_message_deregister_callbacks();
     connection_service_unsubscribe();
     battery_state_service_unsubscribe();

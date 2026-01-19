@@ -169,7 +169,7 @@ void dict_parse(DictionaryIterator *iter, void *context) {
     switch(message.message_type) {
 
     case MSG_INFO: send_info(); break;
-    case MSG_TZ: tz_change(message.timezone_minutes); break;
+    case MSG_TZ: tz_set(message.timezone_minutes); break;
     case MSG_PHONE_DND: phone_dnd(message.phone_dnd); break;
     case MSG_PHONE_CHG: phone_charge(message.phone_battery, message.phone_charging); break;
     case MSG_NET: phone_net(message.network_gen, message.active_sim, message.carrier); break;

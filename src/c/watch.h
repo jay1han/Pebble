@@ -1,8 +1,10 @@
 #pragma once
 
 void time_update();
-void tz_change(int minutes);
+void tz_init();
+
 int tz_get();
+void tz_set(int minutes);
 extern BatteryChargeState watch_battery;
 void charge_update(BatteryChargeState charge_state);
 void connection_update(bool connected);

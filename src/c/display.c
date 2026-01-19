@@ -5,6 +5,13 @@
 
 static Layer *s_window_layer;
 
+#define Left     GTextAlignmentLeft
+#define Right    GTextAlignmentRight
+#define Center   GTextAlignmentCenter
+#define FONT_49  FONT_KEY_ROBOTO_BOLD_SUBSET_49
+#define FONT_28  FONT_KEY_GOTHIC_28_BOLD
+#define FONT_24  FONT_KEY_GOTHIC_24_BOLD
+
 static struct {
     TextLayer *layer;
     GRect rect;
@@ -14,20 +21,20 @@ static struct {
     GTextAlignment align;
     const char *font;
 } disp[disp_end] = {
-    {NULL, {{0, -10},   {144, 31}}, 0xFF, 3, -1, GTextAlignmentLeft  , FONT_KEY_GOTHIC_28_BOLD       },      //  disp_quiet
-    {NULL, {{0, -10},   {144, 31}}, 0xFF, 3, -1, GTextAlignmentCenter, FONT_KEY_GOTHIC_28_BOLD       },      //  disp_date
-    {NULL, {{0, -10},   {144, 31}}, 0xFF, 3, -1, GTextAlignmentRight , FONT_KEY_GOTHIC_28_BOLD       },      //  disp_dnd !TODO
-    {NULL, {{0, 16},    {144, 51}}, 0xC0, 3, -1, GTextAlignmentCenter, FONT_KEY_ROBOTO_BOLD_SUBSET_49},      //  disp_home
-    {NULL, {{0, 69},    {144, 31}}, 0xFF, 3, -1, GTextAlignmentCenter, FONT_KEY_GOTHIC_28_BOLD       },      //  disp_noti
-    {NULL, {{30, 97},   {144, 29}}, 0xC0, 3, -1, GTextAlignmentLeft  , FONT_KEY_GOTHIC_24_BOLD       },      //  disp_btid
-    {NULL, {{0, 97},    {143, 29}}, 0xC0, 4,  3, GTextAlignmentRight , FONT_KEY_GOTHIC_24_BOLD       },      //  disp_btc
-    {NULL, {{4, 97},    {144, 31}}, 0xC0, 4, -1, GTextAlignmentLeft  , FONT_KEY_GOTHIC_24_BOLD       },      //  disp_sim
-    {NULL, {{2, 116},   {144, 31}}, 0xC0, 4, -1, GTextAlignmentLeft  , FONT_KEY_GOTHIC_28_BOLD       },      //  disp_net 
-    {NULL, {{30, 116},  {144, 31}}, 0xC0, 4, -1, GTextAlignmentLeft  , FONT_KEY_GOTHIC_28_BOLD       },      //  disp_plmn
-    {NULL, {{30, 118},  {144, 29}}, 0xC0, 4, -1, GTextAlignmentLeft  , FONT_KEY_GOTHIC_24_BOLD       },      //  disp_wifi
-    {NULL, {{0, 140},   {140, 31}}, 0xFF, 4, -1, GTextAlignmentCenter, FONT_KEY_GOTHIC_28_BOLD       },      //  disp_away
-    {NULL, {{0, 140},   {144, 31}}, 0xFF, 4, -1, GTextAlignmentLeft  , FONT_KEY_GOTHIC_28_BOLD       },      //  disp_wbat
-    {NULL, {{0, 140},   {144, 31}}, 0xFF, 4, -1, GTextAlignmentRight , FONT_KEY_GOTHIC_28_BOLD       },      //  disp_pbat
+    {NULL, {{0, -10},   {144, 31}}, 0xFF, 3, -1, Left  , FONT_28},  //  disp_quiet
+    {NULL, {{0, -10},   {144, 31}}, 0xFF, 3, -1, Center, FONT_28},  //  disp_date
+    {NULL, {{0, -10},   {144, 31}}, 0xFF, 3, -1, Right , FONT_28},  //  disp_dnd !TODO
+    {NULL, {{0, 16},    {144, 51}}, 0xC0, 3, -1, Center, FONT_49},  //  disp_home
+    {NULL, {{0, 69},    {144, 31}}, 0xFF, 3, -1, Center, FONT_28},  //  disp_noti
+    {NULL, {{30, 97},   {144, 29}}, 0xC0, 3, -1, Left  , FONT_24},  //  disp_btid
+    {NULL, {{0, 97},    {143, 29}}, 0xC0, 4,  3, Right , FONT_24},  //  disp_btc
+    {NULL, {{4, 97},    {144, 31}}, 0xC0, 4, -1, Left  , FONT_24},  //  disp_sim
+    {NULL, {{2, 116},   {144, 31}}, 0xC0, 4, -1, Left  , FONT_28},  //  disp_net 
+    {NULL, {{30, 116},  {144, 31}}, 0xC0, 4, -1, Left  , FONT_28},  //  disp_plmn
+    {NULL, {{30, 118},  {144, 29}}, 0xC0, 4, -1, Left  , FONT_24},  //  disp_wifi
+    {NULL, {{0, 140},   {140, 31}}, 0xFF, 4, -1, Center, FONT_28},  //  disp_away
+    {NULL, {{0, 140},   {144, 31}}, 0xFF, 4, -1, Left  , FONT_28},  //  disp_wbat
+    {NULL, {{0, 140},   {144, 31}}, 0xFF, 4, -1, Right , FONT_28},  //  disp_pbat
 };
 
 static struct {

@@ -34,9 +34,14 @@ void time_update() {
     tz_update(&temp);
 }
 
-void tz_change(int minutes) {
+void tz_set(int minutes) {
+    if (minutes != tz)
+        persist_write_int(STOR_TZ_INT, minutes);
     tz = minutes;
-    tz_update(NULL);
+}
+
+void tz_init() {
+    tz = persist_read_int(STOR_TZ_INT);
 }
 
 int tz_get() {

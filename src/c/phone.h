@@ -1,6 +1,7 @@
 #pragma once
 
 void phone_init();
+void phone_deinit();
 
 void phone_charge(int batt, bool charging);
 void phone_net(int network_gen, int active_sim, char *carrier);
