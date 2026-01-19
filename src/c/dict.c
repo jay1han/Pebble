@@ -61,14 +61,18 @@ static struct {
     action_t   action;
 } message;
 
-void send_info(bool fresh) {
+void send_fresh() {
     DictionaryIterator *iter;
     app_message_outbox_begin(&iter);
+    dict_write_int8(iter, KEY_MSG_TYPE_I8, MSG_FRESH);
+    app_message_outbox_send();
+}
 
-    if (fresh)
-        dict_write_int8(iter, KEY_MSG_TYPE_I8, MSG_FRESH);
-    else
-        dict_write_int8(iter, KEY_MSG_TYPE_I8, MSG_INFO);
+void send_info() {
+    DictionaryIterator *iter;
+    app_message_outbox_begin(&iter);
+    
+    dict_write_int8(iter, KEY_MSG_TYPE_I8, MSG_INFO);
     dict_write_int8(iter, KEY_MODEL_I8, watch_info_get_model());
     WatchInfoVersion version = watch_info_get_firmware_version();
     uint32_t version_u32 = ((uint32_t)version.major << 16) | ((uint32_t)version.minor << 8) | (uint32_t)version.patch;
@@ -164,7 +168,7 @@ void dict_parse(DictionaryIterator *iter, void *context) {
 
     switch(message.message_type) {
 
-    case MSG_INFO: send_info(false); break;
+    case MSG_INFO: send_info(); break;
     case MSG_TZ: tz_change(message.timezone_minutes); break;
     case MSG_PHONE_DND: phone_dnd(message.phone_dnd); break;
     case MSG_PHONE_CHG: phone_charge(message.phone_battery, message.phone_charging); break;
