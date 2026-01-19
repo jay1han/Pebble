@@ -53,7 +53,7 @@ static void init() {
     app_message_register_outbox_sent(outbox_sent);
     app_message_open(128, 128);
 
-    send_fresh();
+//    send_fresh();
 }
 
 static void deinit() {
