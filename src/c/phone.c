@@ -11,6 +11,7 @@ static char plmn[20];
 static char wifi[20];
 static char btid[20];
 static char btc[4];
+static char bton[4];
 static char dnd[4];
 static char noti[16];
 
@@ -22,6 +23,7 @@ void phone_init() {
     persist_read_string(STOR_WIFI_20, wifi, sizeof(wifi));
     persist_read_string(STOR_BTID_20, btid, sizeof(btid));
     persist_read_string(STOR_BTC_4,   btc,  sizeof(btc));
+    persist_read_string(STOR_BTON_4,  bton, sizeof(bton));
     persist_read_string(STOR_DND_4,   dnd,  sizeof(dnd));
     persist_read_string(STOR_NOTI_16, noti, sizeof(noti));
     
@@ -29,6 +31,7 @@ void phone_init() {
     disp_set(disp_pbat, pbat);
     disp_set(disp_btid, btid);
     disp_set(disp_btc , btc);
+    disp_set(disp_btc , bton);
     disp_set(disp_dnd , dnd);
     disp_set(disp_net , net);
     disp_set(disp_sim , sim);
@@ -68,6 +71,10 @@ void phone_deinit() {
     persist_read_string(STOR_BTC_4, buffer, sizeof(btc));
     if (strcmp(buffer, btc) != 0)
         persist_write_string(STOR_BTC_4, btc);
+    
+    persist_read_string(STOR_BTON_4, buffer, sizeof(bton));
+    if (strcmp(buffer, bton) != 0)
+        persist_write_string(STOR_BTON_4, bton);
     
     persist_read_string(STOR_DND_4, buffer, sizeof(dnd));
     if (strcmp(buffer, dnd) != 0)
@@ -125,7 +132,7 @@ void phone_wifi(char *text) {
     }
 }
 
-void phone_bt(char *id, int charge) {
+void phone_bt(char *id, int charge, bool active) {
     strncpy(btid, id, sizeof(btid));
     btid[sizeof(btid) - 1] = 0;
     disp_set(disp_btid, btid);
@@ -133,8 +140,11 @@ void phone_bt(char *id, int charge) {
     if (charge >= 100) strcpy(btc, "00");
     else if (charge <= 0) btc[0] = 0;
     else snprintf(btc, 3, "%d", charge);
-    
     disp_set(disp_btc, btc);
+
+    if (active) strcpy(bton, "B");
+    else bton[0] = 0;
+    disp_set(disp_bton, bton);
 }
 
 void phone_dnd(bool quiet) {

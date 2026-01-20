@@ -23,6 +23,7 @@ enum {
     KEY_WCHG_I8,
     KEY_SIM_I8,
     KEY_CARRIER_S20,
+    KEY_BT_ON_I8,
 };
 
 typedef enum {
@@ -57,6 +58,7 @@ static struct {
     char       *wifi_ssid;
     char       *bt_device;
     int8_t     bt_battery;
+    bool       bt_on;
     char       *notifications;
     action_t   action;
 } message;
@@ -111,7 +113,7 @@ void dict_parse(DictionaryIterator *iter, void *context) {
             
         case KEY_PHONE_DND_I8:
             if (tuple->type == TUPLE_INT && tuple->length == 1)
-                message.phone_dnd = (bool)tuple->value->int8;
+                message.phone_dnd = tuple->value->int8 != 0;
             break;
             
         case KEY_PHONE_BATT_I8:
@@ -121,7 +123,7 @@ void dict_parse(DictionaryIterator *iter, void *context) {
             
         case KEY_PHONE_CHG_I8:
             if (tuple->type == TUPLE_INT && tuple->length == 1)
-                message.phone_charging = (bool)tuple->value->int8;
+                message.phone_charging = tuple->value->int8 != 0;
             break;
             
         case KEY_NET_I8:
@@ -158,6 +160,11 @@ void dict_parse(DictionaryIterator *iter, void *context) {
             if (tuple->type == TUPLE_CSTRING && tuple->length <= 20)
                 message.carrier = tuple->value->cstring;
             break;
+
+        case KEY_BT_ON_I8:
+            if (tuple->type == TUPLE_INT && tuple->length == 1)
+                message.bt_on = tuple->value->int8 != 0;
+            break;
             
         default: break;
             
@@ -174,7 +181,7 @@ void dict_parse(DictionaryIterator *iter, void *context) {
     case MSG_PHONE_CHG: phone_charge(message.phone_battery, message.phone_charging); break;
     case MSG_NET: phone_net(message.network_gen, message.active_sim, message.carrier); break;
     case MSG_WIFI: phone_wifi(message.wifi_ssid); break;
-    case MSG_BT: phone_bt(message.bt_device, message.bt_battery); break;
+    case MSG_BT: phone_bt(message.bt_device, message.bt_battery, message.bt_on); break;
     case MSG_NOTI: phone_noti(message.notifications); break;
     case MSG_WBATT: send_batt(); break;
     case MSG_ACTION: break;
