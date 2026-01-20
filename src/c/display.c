@@ -26,9 +26,9 @@ static struct {
     {NULL, {{0, -10},   {144, 31}}, 0xFF, 3, -1, Right , FONT_28},  //  disp_dnd !TODO
     {NULL, {{0, 16},    {144, 51}}, 0xC0, 3, -1, Center, FONT_49},  //  disp_home
     {NULL, {{0, 69},    {144, 31}}, 0xFF, 3, -1, Center, FONT_28},  //  disp_noti
-    {NULL, {{0, -6},    {144, 29}}, 0xFF, 3, -1, Left  , FONT_24},  //  disp_bton
+    {NULL, {{2, -8},    {142, 29}}, 0xFF, 3, -1, Left  , FONT_24},  //  disp_bton
     {NULL, {{30, 97},   {144, 29}}, 0xC0, 3, -1, Left  , FONT_24},  //  disp_btid
-    {NULL, {{0, 97},    {143, 29}}, 0xC0, 4,  3, Right , FONT_24},  //  disp_btc
+    {NULL, {{0, 97},    {142, 29}}, 0xC0, 4,  3, Right , FONT_24},  //  disp_btc
     {NULL, {{4, 97},    {144, 31}}, 0xC0, 4, -1, Left  , FONT_24},  //  disp_sim
     {NULL, {{2, 116},   {144, 31}}, 0xC0, 4, -1, Left  , FONT_28},  //  disp_net 
     {NULL, {{30, 116},  {144, 31}}, 0xC0, 4, -1, Left  , FONT_28},  //  disp_plmn
@@ -46,7 +46,7 @@ static struct {
     {NULL, {{0, 0},     {144, 21}}, 0xC0},
     {NULL, {{0, 74},    {144, 29}}, 0xC0},
     {NULL, {{0, 147},   {144, 22}}, 0xC0},
-    {NULL, {{120, 103}, {24, 20}},  0x3F},
+    {NULL, {{118, 103}, {26, 20}},  0x3F},  // disp_btc
 };
 
 static struct {
@@ -98,7 +98,7 @@ void disp_create(Layer *window_layer) {
 
 void disp_connected(bool connected) {
     if (!connected) {
-        phone_charge(0, 0);
+        phone_charge(0, false, false);
         phone_dnd(false);
         phone_noti("");
         if (s_window_layer != NULL) {

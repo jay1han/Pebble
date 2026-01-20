@@ -6,28 +6,32 @@
 
 enum {
     KEY_MSG_TYPE_I8 = 1,
-    KEY_TZ_MINS_I16,
-    KEY_PHONE_DND_I8,
-    KEY_PHONE_BATT_I8,
-    KEY_PHONE_CHG_I8,
-    KEY_NET_I8,
-    KEY_WIFI_S20,
-    KEY_BTID_S20,
-    KEY_BTC_I8,
-    KEY_NOTI_S16,
-    KEY_ACTION_I8,
     KEY_MODEL_I8,
     KEY_VERSION_U32,
     KEY_WBATT_I8,
     KEY_WPLUG_I8,
     KEY_WCHG_I8,
+    KEY_TZ_MINS_I16,
+    KEY_ACTION_I8,
+    KEY_PHONE_DND_I8,
+    KEY_PHONE_BATT_I8,
+    KEY_PHONE_PLUG_I8,
+    KEY_PHONE_CHG_I8,
+    KEY_NET_I8,
     KEY_SIM_I8,
     KEY_CARRIER_S20,
+    KEY_WIFI_S20,
+    KEY_BTID_S20,
+    KEY_BTC_I8,
     KEY_BT_ON_I8,
+    KEY_NOTI_S16,
 };
 
 typedef enum {
     MSG_INFO = 1,
+    MSG_FRESH,
+    MSG_WBATT,
+    MSG_ACTION,
     MSG_TZ,
     MSG_PHONE_DND,
     MSG_PHONE_CHG,
@@ -35,9 +39,6 @@ typedef enum {
     MSG_WIFI,
     MSG_BT,
     MSG_NOTI,
-    MSG_WBATT,
-    MSG_ACTION,
-    MSG_FRESH
 } msg_type_t;
 
 typedef enum {
@@ -52,6 +53,7 @@ static struct {
     bool       phone_dnd;
     int8_t     phone_battery;
     bool       phone_charging;
+    bool       phone_plugged;
     int8_t     network_gen;
     int8_t     active_sim;
     char       *carrier;
@@ -126,6 +128,11 @@ void dict_parse(DictionaryIterator *iter, void *context) {
                 message.phone_charging = tuple->value->int8 != 0;
             break;
             
+        case KEY_PHONE_PLUG_I8:
+            if (tuple->type == TUPLE_INT && tuple->length == 1)
+                message.phone_plugged = tuple->value->int8 != 0;
+            break;
+            
         case KEY_NET_I8:
             if (tuple->type == TUPLE_INT && tuple->length == 1)
                 message.network_gen = tuple->value->int8;
@@ -178,7 +185,7 @@ void dict_parse(DictionaryIterator *iter, void *context) {
     case MSG_INFO: send_info(); break;
     case MSG_TZ: tz_set(message.timezone_minutes); break;
     case MSG_PHONE_DND: phone_dnd(message.phone_dnd); break;
-    case MSG_PHONE_CHG: phone_charge(message.phone_battery, message.phone_charging); break;
+    case MSG_PHONE_CHG: phone_charge(message.phone_battery, message.phone_plugged, message.phone_charging); break;
     case MSG_NET: phone_net(message.network_gen, message.active_sim, message.carrier); break;
     case MSG_WIFI: phone_wifi(message.wifi_ssid); break;
     case MSG_BT: phone_bt(message.bt_device, message.bt_battery, message.bt_on); break;

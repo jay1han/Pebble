@@ -31,7 +31,7 @@ void phone_init() {
     disp_set(disp_pbat, pbat);
     disp_set(disp_btid, btid);
     disp_set(disp_btc , btc);
-    disp_set(disp_btc , bton);
+    disp_set(disp_bton, bton);
     disp_set(disp_dnd , dnd);
     disp_set(disp_net , net);
     disp_set(disp_sim , sim);
@@ -85,9 +85,10 @@ void phone_deinit() {
         persist_write_string(STOR_NOTI_16, noti);
 }
 
-void phone_charge(int batt, bool charging) {
+void phone_charge(int batt, bool plugged, bool charging) {
     char *p = pbat;
     if (charging) *(p++) = '+';
+    else if (plugged) *(p++) = '-';
     if (batt >= 100) strncpy(p, "00", 3);
     else if (batt <= 0) pbat[0] = 0;
     else snprintf(p, 3, "%d", batt);
