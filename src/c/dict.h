@@ -13,6 +13,7 @@ enum {
     STOR_DND_4,
     STOR_NOTI_16,
     STOR_BTON_4,
+    STOR_END
 };
 
 void dict_parse(DictionaryIterator *iter, void *context);
