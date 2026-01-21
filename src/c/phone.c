@@ -18,14 +18,26 @@ static char noti[16];
 static bool changed[STOR_END];
 
 void phone_init() {
+    persist_read_string(STOR_PBAT_4,  pbat, sizeof(pbat));
+    persist_read_string(STOR_NET_4,   net,  sizeof(net));
+    persist_read_string(STOR_SIM_4,   sim,  sizeof(sim));
     persist_read_string(STOR_PLMN_20, plmn, sizeof(plmn));
     persist_read_string(STOR_WIFI_20, wifi, sizeof(wifi));
     persist_read_string(STOR_BTID_20, btid, sizeof(btid));
+    persist_read_string(STOR_BTC_4,   btc,  sizeof(btc));
+    persist_read_string(STOR_DND_4,   dnd,  sizeof(dnd));
     persist_read_string(STOR_NOTI_16, noti, sizeof(noti));
+    persist_read_string(STOR_BTON_4,  bton, sizeof(bton));
     
-    disp_set(disp_noti, noti);
-    disp_set(disp_btid, btid);
+    disp_set(disp_pbat, pbat);
     disp_set(disp_net , net);
+    disp_set(disp_sim , sim);
+    disp_set(disp_btid, btid);
+    disp_set(disp_btc,  btc);
+    disp_set(disp_dnd,  dnd);
+    disp_set(disp_noti, noti);
+    disp_set(disp_bton, bton);
+    
     if (wifi[0] != 0)
         disp_set(disp_wifi, wifi);
     else
@@ -33,6 +45,15 @@ void phone_init() {
 }
 
 void phone_deinit() {
+    if (changed[STOR_PBAT_4]) 
+        persist_write_string(STOR_PBAT_4, pbat);
+    
+    if (changed[STOR_NET_4]) 
+        persist_write_string(STOR_NET_4, net);
+    
+    if (changed[STOR_SIM_4]) 
+        persist_write_string(STOR_SIM_4, sim);
+    
     if (changed[STOR_PLMN_20])
         persist_write_string(STOR_PLMN_20, plmn);
     
@@ -42,8 +63,17 @@ void phone_deinit() {
     if (changed[STOR_BTID_20])
         persist_write_string(STOR_BTID_20, btid);
     
+    if (changed[STOR_BTC_4]) 
+        persist_write_string(STOR_BTC_4, btc);
+    
+    if (changed[STOR_DND_4]) 
+        persist_write_string(STOR_DND_4, dnd);
+    
     if (changed[STOR_NOTI_16])
         persist_write_string(STOR_NOTI_16, noti);
+    
+    if (changed[STOR_BTON_4]) 
+        persist_write_string(STOR_BTON_4, bton);
 }
 
 void phone_charge(int batt, bool plugged, bool charging) {
@@ -54,33 +84,47 @@ void phone_charge(int batt, bool plugged, bool charging) {
     else if (batt <= 0) pbat[0] = 0;
     else snprintf(p, 3, "%d", batt);
     pbat[3] = 0;
+    
+//    changed[STOR_PBAT_4] = true;
     disp_set(disp_pbat, pbat);
 }
 
 void phone_net(int network_gen, int active_sim, char *carrier) {
+    char net1[4];
     if (network_gen > 0 && network_gen <= 5)
-        snprintf(net, 3, "%dG", network_gen);
-    else net[0] = 0;
-    disp_set(disp_net, net);
+        snprintf(net1, 3, "%dG", network_gen);
+    else net1[0] = 0;
+    if (strcmp(net, net1)) {
+        strncpy(net, net1, sizeof(net));
+        net[sizeof(net) - 1] = 0;
+        changed[STOR_NET_4] = true;
+        disp_set(disp_net, net);
+    }
 
-    char *p = sim;
+    char sim1[4];
+    char *p = sim1;
     if (active_sim & 0x0F) *(p++) = '0' + (active_sim & 0x0F);
     if (active_sim & 0x10) *(p++) = 'R';
     *p = 0;
-    disp_set(disp_sim, sim);
+    if (strcmp(sim, sim1)) {
+        strncpy(sim, sim1, sizeof(sim));
+        sim[sizeof(sim) - 1] = 0;
+        changed[STOR_SIM_4] = true;
+        disp_set(disp_sim, sim);
+    }
 
     if (strcmp(plmn, carrier)) {
         strncpy(plmn, carrier, sizeof(plmn) - 1);
         plmn[sizeof(plmn) - 1] = 0;
         changed[STOR_PLMN_20] = true;
-    }
-    
-    if (wifi[0] == 0) {
-        disp_set(disp_wifi, wifi);
-        if (plmn[0] != 0) disp_set(disp_plmn, plmn);
-    } else {
-        if (plmn[0] != 0) disp_set(disp_plmn, "");
-        disp_set(disp_wifi, wifi);
+        
+        if (wifi[0] == 0) {
+            disp_set(disp_wifi, wifi);
+            if (plmn[0] != 0) disp_set(disp_plmn, plmn);
+        } else {
+            if (plmn[0] != 0) disp_set(disp_plmn, "");
+            disp_set(disp_wifi, wifi);
+        }
     }
 }
 
@@ -88,14 +132,14 @@ void phone_wifi(char *text) {
     if (strcmp(wifi, text)) {
         strncpy(wifi, text, sizeof(wifi));
         wifi[sizeof(wifi) - 1] = 0;
-    }
-    
-    if (wifi[0] == 0) {
-        disp_set(disp_wifi, wifi);
-        if (plmn[0] != 0) disp_set(disp_plmn, plmn);
-    } else {
-        if (plmn[0] != 0) disp_set(disp_plmn, "");
-        disp_set(disp_wifi, wifi);
+        changed[STOR_WIFI_20] = true;
+        if (wifi[0] == 0) {
+            disp_set(disp_wifi, wifi);
+            if (plmn[0] != 0) disp_set(disp_plmn, plmn);
+        } else {
+            if (plmn[0] != 0) disp_set(disp_plmn, "");
+            disp_set(disp_wifi, wifi);
+        }
     }
 }
 
@@ -103,29 +147,43 @@ void phone_bt(char *id, int charge, bool active) {
     if (strcmp(btid, id)) {
         strncpy(btid, id, sizeof(btid));
         btid[sizeof(btid) - 1] = 0;
+        changed[STOR_BTID_20] = true;
+        disp_set(disp_btid, btid);
     }
-    disp_set(disp_btid, btid);
-    
-    if (charge >= 100) strcpy(btc, "00");
-    else if (charge <= 0) btc[0] = 0;
-    else snprintf(btc, 3, "%d", charge);
-    disp_set(disp_btc, btc);
 
-    if (active) strcpy(bton, "B");
-    else bton[0] = 0;
-    disp_set(disp_bton, bton);
+    char btc1[4];
+    if (charge >= 100) strcpy(btc1, "00");
+    else if (charge <= 0) btc1[0] = 0;
+    else snprintf(btc1, 3, "%d", charge);
+    if (strcmp(btc, btc1)) {
+        strncpy(btc, btc1, sizeof(btc));
+        btc[sizeof(btc) - 1] = 0;
+        changed[STOR_BTC_4] = true;
+        disp_set(disp_btc, btc);
+    }
+
+    if (active != (bton[0] != 0)) {
+        if (active) strcpy(bton, "B");
+        else bton[0] = 0;
+        changed[STOR_BTON_4] = true;
+        disp_set(disp_bton, bton);
+    }
 }
 
 void phone_dnd(bool quiet) {
-    if (quiet) strcpy(dnd, "X");
-    else strcpy(dnd, " ");
-    disp_set(disp_dnd, dnd);
+    if (quiet != (dnd[0] != 0)) {
+        if (quiet) strcpy(dnd, "X");
+        else dnd[0] = 0;
+        changed[STOR_DND_4] = true;
+        disp_set(disp_dnd, dnd);
+    }
 }
 
 void phone_noti(char *text) {
     if (strcmp(noti, text)) {
         strncpy(noti, text, sizeof(noti));
         noti[sizeof(noti) - 1] = 0;
+        changed[STOR_NOTI_16] = true;
     }
     disp_set(disp_noti, noti);
 }
