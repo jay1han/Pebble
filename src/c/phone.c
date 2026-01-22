@@ -89,9 +89,13 @@ void phone_charge(int batt, bool plugged, bool charging) {
 
 void phone_net(int network_gen, int active_sim, char *carrier) {
     char net1[4];
-    if (network_gen > 0 && network_gen <= 5)
-        snprintf(net1, 3, "%dG", network_gen);
-    else net1[0] = 0;
+    int has_data = network_gen & 0x10;
+    int has_gen = network_gen & 0x0F;
+    if (has_gen > 0 && has_gen <= 5) net1[0] = '0' + has_gen;
+    else net1[0] = '-';
+    if (has_data) net1[1] = 'G';
+    else net1[1] = 'v';
+    net1[2] = 0;
     if (strcmp(net, net1)) {
         strncpy(net, net1, sizeof(net));
         net[sizeof(net) - 1] = 0;
