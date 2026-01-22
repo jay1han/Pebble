@@ -15,8 +15,6 @@ static char bton[4];
 static char dnd[4];
 static char noti[16];
 
-static bool changed[STOR_END];
-
 void phone_init() {
     persist_read_string(STOR_PBAT_4,  pbat, sizeof(pbat));
     persist_read_string(STOR_NET_4,   net,  sizeof(net));

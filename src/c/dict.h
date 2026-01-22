@@ -15,6 +15,7 @@ enum {
     STOR_BTON_4,
     STOR_END
 };
+extern bool changed[STOR_END];
 
 void dict_parse(DictionaryIterator *iter, void *context);
 void send_info();

@@ -62,7 +62,6 @@ static bool quiet_time = false;
 
 static void check_quiet_time() {
     bool is_active = quiet_time_is_active();
-    APP_LOG(APP_LOG_LEVEL_INFO, "Quiet %d -> %d", (int)quiet_time, (int)is_active);
     if (quiet_time != is_active) {
         quiet_time = is_active;
         text_layer_set_text(disp[disp_quiet].layer, quiet_time ? "Q" : "");
@@ -124,8 +123,6 @@ void disp_destroy(void) {
     for (size_t i = 0; i < BG; i++) {
         bitmap_layer_destroy(bg[i].layer);
     }
-
-    s_window_layer = NULL;
 }
 
 void disp_set(disp_t index, char *text) {

@@ -10,6 +10,17 @@ static char date[12];
 static int tz = 8 * 60;
 static char wbat[4];
 
+void watch_init() {
+    persist_read_string(STOR_WBAT_4, wbat, sizeof(wbat));
+    disp_set(disp_wbat, wbat);
+}
+
+void watch_deinit() {
+    if (changed[STOR_WBAT_4]) {
+        persist_write_string(STOR_WBAT_4, wbat);
+    }
+}
+
 static void tz_update(time_t *temp) {
     time_t now;
     if (temp == NULL) {
@@ -38,6 +49,7 @@ void tz_set(int minutes) {
     if (minutes != tz)
         persist_write_int(STOR_TZ_INT, minutes);
     tz = minutes;
+    time_update();
 }
 
 void tz_init() {
@@ -51,13 +63,20 @@ int tz_get() {
 BatteryChargeState watch_battery = {0, false, false};
 
 void charge_update(BatteryChargeState charge_state) {
+    char wbat1[4];
     watch_battery = charge_state;
-    if (charge_state.charge_percent >= 100) strcpy(wbat, "00");
+    if (charge_state.charge_percent >= 100) strcpy(wbat1, "00");
     else {
-        snprintf(wbat, sizeof(wbat), "%d", charge_state.charge_percent);
+        snprintf(wbat1, sizeof(wbat1), "%d", charge_state.charge_percent);
     }
-    disp_set(disp_wbat, wbat);
-    send_batt();
+
+    if (strcmp(wbat, wbat1) != 0) {
+        strncpy(wbat, wbat1, sizeof(wbat));
+        wbat[sizeof(wbat) - 1] = 0;
+        changed[STOR_WBAT_4] = true;
+        disp_set(disp_wbat, wbat);
+        send_batt();
+    }
 }
 
 static bool conn_app = false;

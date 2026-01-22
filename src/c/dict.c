@@ -4,6 +4,8 @@
 #include "watch.h"
 #include "phone.h"
 
+bool changed[STOR_END];
+
 enum {
     KEY_MSG_TYPE_I8 = 1,
     KEY_MODEL_I8,
@@ -39,7 +41,23 @@ typedef enum {
     MSG_WIFI,
     MSG_BT,
     MSG_NOTI,
+    MSG_TYPE
 } msg_type_t;
+
+static const char MSG_NAME[MSG_TYPE][8] = {
+    "NONE",
+    "INFO",
+    "FRESH",
+    "WBATT",
+    "ACTION",
+    "TZ",
+    "DND",
+    "CHG",
+    "NET",
+    "WIFI",
+    "BT",
+    "NOTI",
+};
 
 typedef enum {
     ACTION_FIND = 1,
@@ -70,6 +88,7 @@ void send_fresh() {
     app_message_outbox_begin(&iter);
     dict_write_int8(iter, KEY_MSG_TYPE_I8, MSG_FRESH);
     app_message_outbox_send();
+    APP_LOG(APP_LOG_LEVEL_INFO, "FRESH out");
 }
 
 void send_info() {
@@ -84,6 +103,7 @@ void send_info() {
     dict_write_int16(iter, KEY_TZ_MINS_I16, tz_get());
     
     app_message_outbox_send();
+    APP_LOG(APP_LOG_LEVEL_INFO, "INFO out");
 }
 
 void send_batt() {
@@ -96,16 +116,21 @@ void send_batt() {
     dict_write_int8(iter, KEY_WCHG_I8, watch_battery.is_charging);
     
     app_message_outbox_send();
+    APP_LOG(APP_LOG_LEVEL_INFO, "BATT out");
 }
 
 void dict_parse(DictionaryIterator *iter, void *context) {
+    
     Tuple *tuple = dict_read_first(iter);
     while (tuple) {
         switch(tuple->key) {
 
         case KEY_MSG_TYPE_I8:
-            if (tuple->type == TUPLE_INT && tuple->length == 1)
+            if (tuple->type == TUPLE_INT && tuple->length == 1) {
                 message.message_type = (msg_type_t)tuple->value->int8;
+                if (message.message_type <= 0 || message.message_type >= MSG_TYPE)
+                    message.message_type = (msg_type_t)0;
+            }
             break;
             
         case KEY_TZ_MINS_I16:
@@ -179,7 +204,8 @@ void dict_parse(DictionaryIterator *iter, void *context) {
         
         tuple = dict_read_next(iter);
     }
-
+    APP_LOG(APP_LOG_LEVEL_INFO, "in %s", MSG_NAME[message.message_type]);
+    
     switch(message.message_type) {
 
     case MSG_INFO: send_info(); break;
