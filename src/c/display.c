@@ -11,6 +11,7 @@ static Layer *s_window_layer;
 #define FONT_49  FONT_KEY_ROBOTO_BOLD_SUBSET_49
 #define FONT_28  FONT_KEY_GOTHIC_28_BOLD
 #define FONT_24  FONT_KEY_GOTHIC_24_BOLD
+#define FONT_18  FONT_KEY_GOTHIC_18_BOLD
 
 static struct {
     TextLayer *layer;
@@ -21,18 +22,18 @@ static struct {
     GTextAlignment align;
     const char *font;
 } disp[disp_end] = {
-    {NULL, {{0, -10},   {144, 31}}, 0xFF, 3, -1, Left  , FONT_28},  //  disp_quiet
+    {NULL, {{0, 16},    {144, 31}}, 0xC0, 3, -1, Right , FONT_18},  //  disp_quiet
     {NULL, {{0, -10},   {144, 31}}, 0xFF, 3, -1, Center, FONT_28},  //  disp_date
-    {NULL, {{0, -10},   {144, 31}}, 0xFF, 3, -1, Right , FONT_28},  //  disp_dnd !TODO
+    {NULL, {{0, -8},    {144, 31}}, 0xFF, 3, -1, Right , FONT_24},  //  disp_dnd !TODO
     {NULL, {{0, 16},    {144, 51}}, 0xC0, 3, -1, Center, FONT_49},  //  disp_home
     {NULL, {{0, 69},    {144, 31}}, 0xFF, 3, -1, Center, FONT_28},  //  disp_noti
     {NULL, {{2, -8},    {142, 29}}, 0xFF, 3, -1, Left  , FONT_24},  //  disp_bton
-    {NULL, {{30, 97},   {144, 29}}, 0xC0, 3, -1, Left  , FONT_24},  //  disp_btid
-    {NULL, {{0, 97},    {142, 29}}, 0xC0, 4,  3, Right , FONT_24},  //  disp_btc
+    {NULL, {{29, 97},   {144, 29}}, 0xC0, 3, -1, Left  , FONT_24},  //  disp_btid
+    {NULL, {{0, 95},    {142, 31}}, 0xC0, 4,  3, Right , FONT_28},  //  disp_btc
     {NULL, {{4, 97},    {144, 31}}, 0xC0, 4, -1, Left  , FONT_24},  //  disp_sim
     {NULL, {{2, 116},   {144, 31}}, 0xC0, 4, -1, Left  , FONT_28},  //  disp_net 
-    {NULL, {{30, 116},  {144, 31}}, 0xC0, 4, -1, Left  , FONT_28},  //  disp_plmn
-    {NULL, {{30, 118},  {144, 29}}, 0xC0, 4, -1, Left  , FONT_24},  //  disp_wifi
+    {NULL, {{29, 116},  {144, 31}}, 0xC0, 4, -1, Left  , FONT_28},  //  disp_plmn
+    {NULL, {{29, 118},  {144, 29}}, 0xC0, 4, -1, Left  , FONT_24},  //  disp_wifi
     {NULL, {{0, 140},   {140, 31}}, 0xFF, 4, -1, Center, FONT_28},  //  disp_away
     {NULL, {{0, 140},   {144, 31}}, 0xFF, 4, -1, Left  , FONT_28},  //  disp_wbat
     {NULL, {{0, 140},   {144, 31}}, 0xFF, 4, -1, Right , FONT_28},  //  disp_pbat
@@ -46,7 +47,7 @@ static struct {
     {NULL, {{0, 0},     {144, 21}}, 0xC0},
     {NULL, {{0, 74},    {144, 29}}, 0xC0},
     {NULL, {{0, 147},   {144, 22}}, 0xC0},
-    {NULL, {{118, 103}, {26, 20}},  0x3F},  // disp_btc
+    {NULL, {{116, 103}, {28, 25}},  0x3F},  // disp_btc
 };
 
 static struct {
