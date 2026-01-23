@@ -75,16 +75,23 @@ void phone_deinit() {
 }
 
 void phone_charge(int batt, bool plugged, bool charging) {
-    char *p = pbat;
+    char pbat1[4];
+    
+    char *p = pbat1;
     if (charging) *(p++) = '+';
     else if (plugged) *(p++) = ':';
     if (batt >= 100) strncpy(p, "00", 3);
-    else if (batt <= 0) pbat[0] = 0;
+    else if (batt <= 0) pbat1[0] = 0;
     else snprintf(p, 3, "%d", batt);
-    pbat[3] = 0;
-    
-//    changed[STOR_PBAT_4] = true;
-    disp_set(disp_pbat, pbat);
+    pbat1[3] = 0;
+
+    APP_LOG(APP_LOG_LEVEL_INFO, "PBAT %s:%s", pbat, pbat1);
+    if (strcmp(pbat, pbat1)) {
+        strncpy(pbat, pbat1, sizeof(pbat));
+        pbat[sizeof(pbat) - 1] = 0;
+        changed[STOR_PBAT_4] = true;
+        disp_set(disp_pbat, pbat);
+    }
 }
 
 void phone_net(int network_gen, int active_sim, char *carrier) {
@@ -186,6 +193,6 @@ void phone_noti(char *text) {
         strncpy(noti, text, sizeof(noti));
         noti[sizeof(noti) - 1] = 0;
         changed[STOR_NOTI_16] = true;
+        disp_set(disp_noti, noti);
     }
-    disp_set(disp_noti, noti);
 }
